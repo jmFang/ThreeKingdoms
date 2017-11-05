@@ -38,6 +38,7 @@ public class HerosListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.tab03, container, false);
         initHeros();
+        //这里有点坑,注意是用 view 来拿到 recyclerView，否则拿不到就成了NullPointer，后面就崩了
         RecyclerView recyclerview = (RecyclerView)view.findViewById(R.id.tab03_recyclerview);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 2);
         recyclerview.setLayoutManager(gridLayoutManager);
