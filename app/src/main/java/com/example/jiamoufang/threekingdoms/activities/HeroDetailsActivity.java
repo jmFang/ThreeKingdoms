@@ -30,6 +30,7 @@ public class HeroDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String heroName = intent.getStringExtra(HERO_NAME);
         int heroImageId = intent.getIntExtra(HERO_IMAGE_ID,0);
+        String introduction = intent.getStringExtra("introduction");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_heroDetails);
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collaspsing_heroDetails);
@@ -48,17 +49,9 @@ public class HeroDetailsActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(heroName);
         Glide.with(this).load(heroImageId).into(heroImage);
         coordinatorlayout.setBackgroundResource(heroImageId);
-        String heroDetailsContent = generateHeroContent(heroName);
-        heroTextContent.setText(heroDetailsContent);
+        heroTextContent.setText(introduction);
     }
 
-    private String generateHeroContent(String heroName) {
-        StringBuilder heroContentBuilder = new StringBuilder();
-        for (int i = 0; i < 500; i++) {
-            heroContentBuilder.append(heroName);
-        }
-    return heroContentBuilder.toString();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

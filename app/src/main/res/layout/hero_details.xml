@@ -10,7 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:background="#50ffffff"
+        android:background="#9000796B"
         android:id="@+id/appBar_heroDetails">
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="35dp"
                 app:cardElevation="12dp"
-                app:cardBackgroundColor="#90FFFFFF"
+                app:cardBackgroundColor="#95FFFFFF"
                 app:cardCornerRadius="4dp">
                 <TextView
                     android:layout_width="wrap_content"
@@ -68,6 +68,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/fab_heroDetails"
         android:layout_margin="16dp"
+        app:elevation="12dp"
         android:src="@mipmap/ic_done_black_48dp"
         app:layout_anchor="@id/appBar_heroDetails"
         app:layout_anchorGravity="bottom|end"/>

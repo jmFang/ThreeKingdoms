@@ -7,10 +7,12 @@ package com.example.jiamoufang.threekingdoms.heros;
 public class Hero {
     private String name;
     private int imageId;
+    private String introduction;
 
-    public Hero(String name, int imageId) {
+    public Hero(String name, int imageId,String introduction) {
         this.name = name;
         this.imageId = imageId;
+        this.introduction = introduction;
     }
 
     public int getImageId() {
@@ -19,5 +21,21 @@ public class Hero {
 
     public String getName() {
         return name;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -59,6 +59,7 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
                 Intent intent = new Intent(mContext, HeroDetailsActivity.class);
                 intent.putExtra(HeroDetailsActivity.HERO_NAME, hero.getName());
                 intent.putExtra(HeroDetailsActivity.HERO_IMAGE_ID,hero.getImageId());
+                intent.putExtra("introduction", hero.getIntroduction());
                 mContext.startActivity(intent);
             }
         });
