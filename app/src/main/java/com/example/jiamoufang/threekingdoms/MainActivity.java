@@ -65,8 +65,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case 1:
                 if (mTab02 == null) {
                     mTab02 = new HerosPKFragment();
-                    transaction.add(R.id.id_content, mTab02);
+                   transaction.add(R.id.id_content, mTab02);
                 } else {
+                    //transaction.add(R.id.id_content, mTab02);
                     transaction.show(mTab02);
                 }
                 break;
@@ -75,6 +76,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     mTab03 = new HerosListFragment();
                     transaction.add(R.id.id_content, mTab03);
                 } else {
+                    //transaction.add(R.id.id_content, mTab03);
                     transaction.show(mTab03);
                 }
                 break;
@@ -110,6 +112,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mImgHeroHit = (ImageButton) findViewById(R.id.id_tab_hit_hero_img);
         mImgHeroPk = (ImageButton) findViewById(R.id.id_tab_heros_pk_img);
         mImgHeroList = (ImageButton) findViewById(R.id.id_tab_herolist_img);
+
+        //mTab01 = new HitHeroFragment();
+       // mTab02 = new HerosPKFragment();
+        //mTab03 = new HerosListFragment();
 
 
 

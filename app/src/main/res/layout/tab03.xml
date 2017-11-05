@@ -4,12 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:text="风云录"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/tab03_recyclerview"
+        android:layout_height="match_parent"/>
 </LinearLayout>
