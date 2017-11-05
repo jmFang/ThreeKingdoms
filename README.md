@@ -45,6 +45,23 @@ UI优化：考虑背景和配色方案。
 ### 人物详情界面：
 
 
+# Get Start
+
+ThreeKingdoms/app/src/main/java/com/example/jiamoufang/threekingdoms/
+
+```
+  -- activities	//所有活动
+    -- HeroDetailsActivity.java
+  -- adapter  //所有适配器
+    -- HeroAdapter.java
+  -- fragment	 //三个Fragment
+    -- HerosListFragment.java	
+    -- HerosPKFragment.java
+    -- HitHeroFragment.java
+  -- heros	 //人物英雄类
+   -- Hero.java
+  -- MainActivity.java
+```
 
 
 
