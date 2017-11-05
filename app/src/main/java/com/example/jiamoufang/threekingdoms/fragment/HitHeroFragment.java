@@ -7,11 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.example.jiamoufang.threekingdoms.R;
+import com.example.jiamoufang.threekingdoms.adapter.PKRecordAdapter;
+import com.example.jiamoufang.threekingdoms.entities.PkRecords;
 import com.oragee.banners.BannerView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,11 +34,15 @@ public class HitHeroFragment extends Fragment {
             R.drawable.ic_guanyu
     };
     private List<View> viewsList;
+    private List<PkRecords> pkRecordsList = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.tab01, container, false);
 
+        /*
+        * 设置 ‘三国志’页面顶部的动画轮播
+        * */
         bannerView = view.findViewById(R.id.banner_tab01);
         viewsList = new ArrayList<>();
         for (int i = 0; i < imgIds.length; i++) {
@@ -45,8 +53,27 @@ public class HitHeroFragment extends Fragment {
             viewsList.add(imageView);
         }
         bannerView.startLoop(true);
-
         bannerView.setViewList(viewsList);
+
+        /*
+        * 设置‘三国志’底部的对决记录列表
+        * */
+        initRecords();
+
+        PKRecordAdapter adapter = new PKRecordAdapter(getContext(),R.layout.pk_record_item,pkRecordsList);
+        ListView pkrecordslistview = (ListView) view.findViewById(R.id.listview_records);
+        pkrecordslistview.setAdapter(adapter);
+
         return view;
+    }
+    /*
+    * 初始化记录列表的items
+    * PKRecords的构造函数参数：String usernameA, String usernameB, String heroNameA, String heroNameB, String PKresult, String PKtime
+    * */
+    private void initRecords() {
+        PkRecords pkrcs = new PkRecords("马化腾","马云","关羽","张飞","张飞胜了关羽","今日:15:30:44");
+        for (int i = 0;i < 10; i++) {
+            pkRecordsList.add(pkrcs);
+        }
     }
 }
