@@ -22,9 +22,12 @@ public class HitHeroFragment extends Fragment {
 
     private BannerView bannerView;
     private int[] imgIds = {
-            R.drawable.guanyu,
-            R.drawable.zhangfei,
-            R.drawable.liubei
+            R.drawable.ic_simayi,
+            R.drawable.ic_zhouyu,
+            R.drawable.ic_zhugeliang,
+            R.drawable.ic_caocao,
+            R.drawable.ic_diaochan,
+            R.drawable.ic_guanyu
     };
     private List<View> viewsList;
     @Nullable
