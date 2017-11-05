@@ -1,6 +1,8 @@
 package com.example.jiamoufang.threekingdoms;
 
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,9 +21,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.jiamoufang.threekingdoms.entities.Person;
 import com.example.jiamoufang.threekingdoms.fragment.HerosListFragment;
 import com.example.jiamoufang.threekingdoms.fragment.HerosPKFragment;
 import com.example.jiamoufang.threekingdoms.fragment.HitHeroFragment;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener{
     private DrawerLayout mDrawerLayout;
@@ -30,18 +40,101 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout mTabHeroPk;
     private LinearLayout mTabHeroList;
 
+    /*
+    * 底部 Tabs
+    * */
     private ImageButton mImgHeroHit;
     private ImageButton mImgHeroPk;
     private ImageButton mImgHeroList;
 
+    /*
+    * Fragments
+    * */
     private Fragment mTab01;
     private Fragment mTab02;
     private Fragment mTab03;
+
+    /*
+    * 滑动抽屉菜单的点击NavigationView
+    * */
+    private NavigationView navigationView;
+    private View nav_headerView;
+    private CircleImageView nav_headerImg;
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        navigationView = (NavigationView)findViewById(R.id.nav_view);
+        nav_headerView = navigationView.getHeaderView(0);
+        nav_headerImg = nav_headerView.findViewById(R.id.nav_icon_image);
+
+        /*
+        * 初始化云端
+        * */
+        Bmob.initialize(this,"885d634d2f139989576fd66a85664c55");
+
+        /*
+        * 云端测试
+        * */
+
+        Person p2 = new Person();
+        p2.setName("lucky girl");
+        p2.setAddress("北京海淀");
+        p2.save(new SaveListener<String>() {
+            @Override
+            public void done(String objectId,BmobException e) {
+                if(e==null){
+                    Toast.makeText(MainActivity.this, "添加数据成功，返回objectId为："+objectId, Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(MainActivity.this, "创建数据失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        BmobQuery<Person> bmomquery = new BmobQuery<>();
+        bmomquery.getObject("3f611ed547", new QueryListener<Person>() {
+            @Override
+            public void done(Person person, BmobException e) {
+                if(e == null) {
+                    Toast.makeText(MainActivity.this, "查询成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "查询失败", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
+        /*
+        * navigationView的选择事件
+        * */
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.my_hero:
+                        Toast.makeText(MainActivity.this, "you select 我的英雄", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.add_hero:
+                        Toast.makeText(MainActivity.this, "you select 添加英雄", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.del_hero:
+                        Toast.makeText(MainActivity.this, "you select 删除英雄", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.invite_hero:
+                        Toast.makeText(MainActivity.this, "you select 邀请好友", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.settings:
+                        Toast.makeText(MainActivity.this, "you select 设置", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
 
         initView();
         initEvent();
@@ -102,6 +195,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mTabHitHero.setOnClickListener(this);
         mTabHeroPk.setOnClickListener(this);
         mTabHeroList.setOnClickListener(this);
+        nav_headerImg.setOnClickListener(this);
     }
 
     private void initView() {
@@ -116,30 +210,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //mTab01 = new HitHeroFragment();
        // mTab02 = new HerosPKFragment();
         //mTab03 = new HerosListFragment();
-
-
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                break;
-            case R.id.settings:
-                Toast.makeText(this, "you click settings", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-        return true;
     }
 
     @Override
@@ -154,6 +224,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.id_tab_herolist:
                 setSelect(2);
+                break;
+            case R.id.nav_icon_image:
+                Toast.makeText(this, "你点击了导航的头像", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
