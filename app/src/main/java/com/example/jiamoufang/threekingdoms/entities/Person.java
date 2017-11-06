@@ -1,5 +1,7 @@
 package com.example.jiamoufang.threekingdoms.entities;
 
+import android.media.Image;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -22,4 +24,5 @@ public class Person extends BmobObject {
     public void setAddress(String address) {
         this.address = address;
     }
+
 }

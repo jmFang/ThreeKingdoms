@@ -1,5 +1,6 @@
 package com.example.jiamoufang.threekingdoms;
 
+import android.content.Intent;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.jiamoufang.threekingdoms.activities.AddHero;
 import com.example.jiamoufang.threekingdoms.entities.Person;
 import com.example.jiamoufang.threekingdoms.fragment.HerosListFragment;
 import com.example.jiamoufang.threekingdoms.fragment.HerosPKFragment;
@@ -80,7 +82,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         * */
 
         Person p2 = new Person();
-        p2.setName("lucky girl");
+        p2.setName("lucky girl ddd");
         p2.setAddress("北京海淀");
         p2.save(new SaveListener<String>() {
             @Override
@@ -118,7 +120,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         Toast.makeText(MainActivity.this, "you select 我的英雄", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.add_hero:
-                        Toast.makeText(MainActivity.this, "you select 添加英雄", Toast.LENGTH_SHORT).show();
+                        Intent toAddHero = new Intent(MainActivity.this, AddHero.class);
+                        startActivity(toAddHero);
+                        //Toast.makeText(MainActivity.this, "you select 添加英雄", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.del_hero:
                         Toast.makeText(MainActivity.this, "you select 删除英雄", Toast.LENGTH_SHORT).show();
