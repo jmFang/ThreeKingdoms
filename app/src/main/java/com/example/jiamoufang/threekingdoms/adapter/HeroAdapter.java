@@ -7,14 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jiamoufang.threekingdoms.R;
 import com.example.jiamoufang.threekingdoms.activities.HeroDetailsActivity;
-import com.example.jiamoufang.threekingdoms.heros.Hero;
+import com.example.jiamoufang.threekingdoms.heros.LocalHero;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ import java.util.List;
 public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<Hero> mHeros;
+    private List<LocalHero> mHeros;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -35,12 +34,12 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
         public ViewHolder(View view) {
             super(view);
             cardView = (CardView) view;
-            heroImage = (ImageView) view.findViewById(R.id.card_hero_image);
-            heroName = (TextView) view.findViewById(R.id.card_hero_name);
+            heroImage = view.findViewById(R.id.card_hero_image);
+            heroName = view.findViewById(R.id.card_hero_name);
         }
     }
 
-    public HeroAdapter(List<Hero> herosList) {
+    public HeroAdapter(List<LocalHero> herosList) {
         mHeros = herosList;
     }
 
@@ -55,10 +54,10 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                Hero hero = mHeros.get(position);
+                LocalHero hero = mHeros.get(position);
                 Intent intent = new Intent(mContext, HeroDetailsActivity.class);
                 intent.putExtra(HeroDetailsActivity.HERO_NAME, hero.getName());
-                intent.putExtra(HeroDetailsActivity.HERO_IMAGE_ID,hero.getImageId());
+                intent.putExtra(HeroDetailsActivity.HERO_IMAGE_ID,hero.getHeroImageId());
                 intent.putExtra("introduction", hero.getIntroduction());
                 mContext.startActivity(intent);
             }
@@ -68,9 +67,9 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Hero hero = mHeros.get(position);
+        LocalHero hero = mHeros.get(position);
         holder.heroName.setText(hero.getName());
-        Glide.with(mContext).load(hero.getImageId()).into(holder.heroImage);
+        Glide.with(mContext).load(hero.getHeroImageId()).into(holder.heroImage);
     }
 
     @Override

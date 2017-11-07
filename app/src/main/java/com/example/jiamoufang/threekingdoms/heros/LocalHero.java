@@ -1,44 +1,44 @@
-
 package com.example.jiamoufang.threekingdoms.heros;
 
+import cn.bmob.v3.datatype.BmobFile;
+
 /**
- * Created by jiamoufang on 2017/11/5.
+ * Created by jiamoufang on 2017/11/7.
  */
 
-public class Hero {
+public class LocalHero {
     private String name;   //姓名
-    private int imageId;   //头像
+    private int heroImageId;
     private String sex;     //性别
     private String date;    //出生日期
     private String place;   //籍贯
     private String state;   //主校势力
     private String introduction;    //简介
 
-    private Integer force;  //武力值(0~100)
-    private Integer inteligence;  //智力值(0~100)
-    private Integer leadship;   //统率值(0~100)
-    private Integer army;   //军队数量:有统率值决定
-    private Integer forage; // 粮草数量(0~1000)
+    private int force;  //武力值(0~100)
+    private int intelligence;  //智力值(0~100)
+    private int leadership;   //统率值(0~100)
+    private int army;   //军队数量:有统率值决定
+    private int forage; // 粮草数量(0~1000)
 
-
-    public Hero(String name, int imageId, String sex, String date, String place, String state, String introduction,
-                Integer force, Integer inteligence, Integer leadship, Integer forage) {
+    public LocalHero(String name, int heroImageId, String sex, String date, String place, String state, String introduction,
+                int force, int intelligence, int leadership, int forage) {
         this.name = name;
-        this.imageId = imageId;
+        this.heroImageId = heroImageId;
         this.sex = sex;
         this.date = date;
         this.place = place;
         this.state = state;
         this.introduction = introduction;
         this.force = force;
-        this.inteligence = inteligence;
-        this.leadship = leadship;
-        this.army = leadship * 1000;
+        this.intelligence = intelligence;
+        this.leadership = leadership;
+        this.army = leadership * 1000;
         this.forage = forage;
     }
 
-    public int getImageId() {
-        return imageId;
+    public int getHeroImageId() {
+        return heroImageId;
     }
 
     public String getName() {
@@ -65,28 +65,28 @@ public class Hero {
         return introduction;
     }
 
-    public Integer getForce() {
+    public int  getForce() {
         return force;
     }
 
-    public Integer getInteligence() {
-        return inteligence;
+    public int getIntelligence() {
+        return intelligence;
     }
 
-    public Integer getLeadship() {
-        return leadship;
+    public int getLeadership() {
+        return leadership;
     }
 
-    public Integer getArmy() {
+    public int getArmy() {
         return army;
     }
 
-    public Integer getForage() {
+    public int getForage() {
         return forage;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public void setHeroImageId(int heroImageId) {
+        this.heroImageId = heroImageId;
     }
 
     public void setIntroduction(String introduction) {
@@ -117,13 +117,13 @@ public class Hero {
         this.force = force;
     }
 
-    public void setInteligence(Integer intel) {
-        this.inteligence = intel;
+    public void setIntelligence(Integer intel) {
+        this.intelligence = intel;
     }
 
-    public void setLeadship(Integer leadship) {
-        this.leadship = leadship;
-        this.army = leadship * 1000;
+    public void setLeadership(Integer leadership) {
+        this.leadership = leadership;
+        this.army = leadership * 1000;
     }
 
     public void setArmy(Integer army) {
@@ -135,10 +135,10 @@ public class Hero {
     }
 
     //计算绝对战斗力，比较大小
-    public Integer getEffectiveness() {
-        Integer attr = (int)(force * 0.3 + inteligence * 0.3 + leadship * 0.4);
+    public int getEffectiveness() {
+        int attr = (int)(force * 0.3 + intelligence * 0.3 + leadership * 0.4);
         int tarmy = army;
-        if(tarmy > forage * 100) {
+        if( tarmy > forage * 100) {
             double ratio = ((double) forage * 100) / army;
             tarmy = (int) (tarmy * ratio);
         }
