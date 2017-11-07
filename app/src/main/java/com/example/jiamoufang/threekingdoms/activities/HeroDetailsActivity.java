@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.jiamoufang.threekingdoms.MainActivity;
+import com.example.jiamoufang.threekingdoms.MyMusic;
 import com.example.jiamoufang.threekingdoms.R;
 
 /**
@@ -22,6 +24,8 @@ import com.example.jiamoufang.threekingdoms.R;
 public class HeroDetailsActivity extends AppCompatActivity {
     public static final String HERO_NAME = "heroName";
     public static final String HERO_IMAGE_ID = "heroImageId";
+
+    private MyMusic myMusic;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,8 +54,24 @@ public class HeroDetailsActivity extends AppCompatActivity {
         Glide.with(this).load(heroImageId).into(heroImage);
         coordinatorlayout.setBackgroundResource(heroImageId);
         heroTextContent.setText(introduction);
+
+        myMusic = new MyMusic(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!MainActivity.isMute) {
+            myMusic.initMusic(R.raw.herodetails_music);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!MainActivity.isMute)
+            myMusic.releaseMusic();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
