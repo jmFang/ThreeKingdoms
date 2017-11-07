@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
-    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.example.jiamoufang.threekingdoms"
         minSdkVersion 17
@@ -34,10 +33,13 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.coldmoqiuli:banners:1.0.0'
     compile 'org.litepal.android:core:1.4.1'
+    compile 'cn.bmob.android:bmob-sdk:3.4.7-aar'
     compile 'cn.bmob.android:bmob-sdk:3.5.5'
+    compile 'cn.bmob.android:bmob-sdk:3.5.0'
     compile 'cn.bmob.android:bmob-push:0.8'
-    compile 'cn.bmob.android:bmob-im:2.0.5@aar'
+   compile 'cn.bmob.android:bmob-im:2.0.5@aar'
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     compile 'cn.bmob.android:http-legacy:1.0'
+    // compile'com.squareup.okhttp3:okhttp:3.4.1'
     testCompile 'junit:junit:4.12'
 }
