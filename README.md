@@ -88,10 +88,11 @@ Android手机平台应用开发课程期中项目作业
 
 有三个对象模型
 
-LocalHero.java  //用于储存英雄资料信息
-PKRecords.java  //用于英雄对决记录
-MyHero.java  //这个还未添加，用于‘我的英雄’
-
+```
+    LocalHero.java  //用于储存英雄资料信息
+    PKRecords.java  //用于英雄对决记录
+    MyHero.java  //这个还未添加，用于‘我的英雄’
+```
 
 
 
