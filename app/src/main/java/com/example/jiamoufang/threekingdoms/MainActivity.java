@@ -1,24 +1,20 @@
 package com.example.jiamoufang.threekingdoms;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.NetworkInfo;
+import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -27,6 +23,9 @@ import com.example.jiamoufang.threekingdoms.entities.Person;
 import com.example.jiamoufang.threekingdoms.fragment.HerosListFragment;
 import com.example.jiamoufang.threekingdoms.fragment.HerosPKFragment;
 import com.example.jiamoufang.threekingdoms.fragment.HitHeroFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
@@ -62,7 +61,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private NavigationView navigationView;
     private View nav_headerView;
     private CircleImageView nav_headerImg;
-    ;
+
+    /*
+    * 播放音樂MediaPlayer
+    * */
+    private List<MediaPlayer> mediaPlayerList = new ArrayList<>();
+    private int currentFragmentIndex = -1;
+    public static boolean isMute = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +85,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         /*
         * 云端测试
         * */
-
         Person p2 = new Person();
         p2.setName("lucky girl ddd");
         p2.setAddress("北京海淀");
@@ -104,10 +108,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     Toast.makeText(MainActivity.this, "查询失败", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
-
 
         /*
         * navigationView的选择事件
@@ -132,6 +134,28 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         break;
                     case R.id.settings:
                         Toast.makeText(MainActivity.this, "you select 设置", Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("背景音樂")
+                                .setMessage("是否調為靜音")
+                                .setPositiveButton("一刻寧靜", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (isMute != true) {
+                                            isMute = true;
+                                            findTargetMusic();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("給我噪起來", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (isMute != false) {
+                                            isMute = false;
+                                            findTargetMusic();
+                                        }
+                                    }
+                                }).show();
+
                         break;
                     default:
                         break;
@@ -142,10 +166,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         initView();
         initEvent();
-        setSelect(0);
     }
 
-    private void setSelect(int i) {
+    private void setSelect(final int i) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         hideFragment(transaction);
@@ -154,7 +177,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case 0:
                 if (mTab01 == null) {
                     mTab01 = new HitHeroFragment();
-                    transaction.add(R.id.id_content,mTab01);
+                    transaction.add(R.id.id_content, mTab01, "main");
                 } else {
                     transaction.show(mTab01);
                 }
@@ -162,7 +185,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case 1:
                 if (mTab02 == null) {
                     mTab02 = new HerosPKFragment();
-                   transaction.add(R.id.id_content, mTab02);
+                   transaction.add(R.id.id_content, mTab02, "battle");
                 } else {
                     //transaction.add(R.id.id_content, mTab02);
                     transaction.show(mTab02);
@@ -171,7 +194,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case 2:
                 if (mTab03 == null) {
                     mTab03 = new HerosListFragment();
-                    transaction.add(R.id.id_content, mTab03);
+                    transaction.add(R.id.id_content, mTab03, "list");
                 } else {
                     //transaction.add(R.id.id_content, mTab03);
                     transaction.show(mTab03);
@@ -181,6 +204,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
         }
         transaction.commit();
+
+        changAndStartMusic(i);
     }
 
     private void hideFragment(FragmentTransaction transaction) {
@@ -236,5 +261,80 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
         }
 
+    }
+
+    public void initMediaPlayer() {
+        mediaPlayerList.add(MediaPlayer.create(this, R.raw.main_music));
+        mediaPlayerList.add(MediaPlayer.create(this, R.raw.battle_music));
+        mediaPlayerList.add(MediaPlayer.create(this, R.raw.herolist_music));
+
+        for (int i = 0; i < mediaPlayerList.size(); i++) {
+            final MediaPlayer mediaPlayer = mediaPlayerList.get(i);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mediaPlayer.start();
+                }
+            });
+        }
+    }
+
+    public void changAndStartMusic(int i) {
+        for (int t = 0; t < mediaPlayerList.size(); t++) {
+            if (mediaPlayerList.get(t).isPlaying()) {
+                mediaPlayerList.get(t).pause();
+            }
+        }
+        mediaPlayerList.get(i).seekTo(0);
+        if (!isMute) {
+            mediaPlayerList.get(i).start();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        findTargetMusic();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (getSupportFragmentManager().findFragmentByTag("main") != null && getSupportFragmentManager().findFragmentByTag("main").isVisible()) {
+            currentFragmentIndex = 0;
+        } else if (getSupportFragmentManager().findFragmentByTag("battle") != null && getSupportFragmentManager().findFragmentByTag("battle").isVisible()) {
+            currentFragmentIndex = 1;
+        } else {
+            currentFragmentIndex = 2;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        for (int i = 0; i < mediaPlayerList.size(); i++) {
+            if (mediaPlayerList.get(i) != null) {
+                mediaPlayerList.get(i).release();
+            }
+        }
+        mediaPlayerList.clear();
+    }
+
+    public void findTargetMusic() {
+        initMediaPlayer();
+        switch (currentFragmentIndex) {
+            case -1:
+                setSelect(0);
+                break;
+            case 0:
+                setSelect(0);
+                break;
+            case 1:
+                setSelect(1);
+                break;
+            default:
+                setSelect(2);
+                break;
+        }
     }
 }

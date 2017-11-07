@@ -8,16 +8,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.jiamoufang.threekingdoms.MainActivity;
+import com.example.jiamoufang.threekingdoms.MyMusic;
 import com.example.jiamoufang.threekingdoms.R;
 
 public class AddHero extends AppCompatActivity implements View.OnClickListener{
@@ -25,6 +27,8 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     private Button SelectHeroButton;
     private Uri imgUri;
     private ImageView heroImage;
+
+    private MyMusic myMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,26 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
 
         initView();
         initEvent();
+
+        myMusic = new MyMusic(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!MainActivity.isMute) {
+            myMusic.initMusic(R.raw.addhero_music);
+        }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!MainActivity.isMute) {
+            myMusic.releaseMusic();
+        }
+    }
 
     /*
     * 点击事件处理
