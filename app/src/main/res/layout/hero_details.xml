@@ -78,8 +78,7 @@
                     android:id="@+id/textView_heroDetails"
                     android:textSize="15sp"
                     android:textColor="#212121"
-                    android:layout_margin="10dp"
-                    android:text="你好啊" />
+                    android:layout_margin="10dp"/>
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

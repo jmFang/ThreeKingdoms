@@ -51,10 +51,7 @@ public class HerosListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
-
-
 
     private void initHeros() {
         mHerosList.clear();

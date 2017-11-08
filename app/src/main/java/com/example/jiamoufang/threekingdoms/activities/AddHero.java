@@ -37,6 +37,7 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
 import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
+import static java.lang.Integer.parseInt;
 
 public class AddHero extends AppCompatActivity implements View.OnClickListener{
     private Uri imgUri;
@@ -69,6 +70,15 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     * */
     private int state = 0;
 
+    /*
+     *储存当前页面显示的LocalHeros实例
+     */
+    private LocalHero hero;
+    /*
+     *修改英雄信息状态时保存最开始的图片id
+     */
+    private int imagId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -89,6 +99,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
          * 编辑英雄信息
          */
         if(getIntent().getStringExtra("editHero") != null) {
+            state = 1;
             String name = getIntent().getStringExtra("editHero");
             EditHero(name);
         }
@@ -173,7 +184,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         if (attack.length() == 0 ) {
             Toast.makeText(this, "武力值不能为空", Toast.LENGTH_SHORT).show();
             return;
-        } else if (Integer.parseInt(attack) > 100 || Integer.parseInt(attack) < 0) {
+        } else if (parseInt(attack) > 100 || parseInt(attack) < 0) {
             Toast.makeText(this, "武力值不超过100", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -181,7 +192,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         if (intelligence.length() == 0 ) {
             Toast.makeText(this, "智力值不能为空", Toast.LENGTH_SHORT).show();
             return;
-        } else if (Integer.parseInt(intelligence) > 100 || Integer.parseInt(intelligence) < 0) {
+        } else if (parseInt(intelligence) > 100 || parseInt(intelligence) < 0) {
             Toast.makeText(this, "智力值不超过100", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -189,7 +200,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         if (leadership.length() == 0 ) {
             Toast.makeText(this, "统帅值不能为空", Toast.LENGTH_SHORT).show();
             return;
-        } else if (Integer.parseInt(leadership) > 100 || Integer.parseInt(leadership) < 0) {
+        } else if (parseInt(leadership) > 100 || parseInt(leadership) < 0) {
             Toast.makeText(this, "统帅值不超过100", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -197,7 +208,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         if (food.length() == 0 ) {
             Toast.makeText(this, "粮草值不能为空", Toast.LENGTH_SHORT).show();
             return;
-        } else if (Integer.parseInt(food) > 1000 || Integer.parseInt(leadership) < 0) {
+        } else if (parseInt(food) > 1000 || parseInt(leadership) < 0) {
             Toast.makeText(this, "粮草值不超过1000", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -239,8 +250,8 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         * */
         if (isUpload) {
             final BmobFile bmobFile = new BmobFile(new File(photoPath));
-            final Hero newHero = new Hero( name,bmobFile,sex,birth,address,belong,introducton,Integer.parseInt(attack),
-                    Integer.parseInt(intelligence),Integer.parseInt(leadership),Integer.parseInt(food));
+            final Hero newHero = new Hero( name,bmobFile,sex,birth,address,belong,introducton, parseInt(attack),
+                    parseInt(intelligence), parseInt(leadership), parseInt(food));
             bmobFile.uploadblock(new UploadFileListener() {
                 @Override
                 public void done(BmobException e) {
@@ -264,10 +275,24 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                 }
-
             });
         }
 
+        /*
+         *当前是修改英雄信息时，修改完之后重新跳转回英雄详情页
+         */
+        if(state == 1) {
+            state = 0;
+            /*
+             * 实例化一个LocalHero实例
+             */
+            hero = new LocalHero(name, imagId, sex, birth, address, belong, introducton, parseInt(attack), parseInt(intelligence), parseInt(leadership), parseInt(food));
+            Herolist.add(hero);
+            Intent intent = new Intent();
+            intent.putExtra("Add_to_Detail", name);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
 
     }
     /*
@@ -462,25 +487,29 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void EditHero(String heroname) {
-        LocalHero tem = Herolist.get(0);
+        hero = Herolist.get(0);
         for(int i = 0; i < Herolist.size(); i++) {
             if(heroname.equals(Herolist.get(i).getName())){
-                tem = Herolist.get(i);
+                hero = Herolist.get(i);
                 break;
             }
         }
-
-        heroName.setText(tem.getName());
-        heroSex.setText(tem.getSex());
-        heroBirth.setText(tem.getDate());
-        heroAddress.setText(tem.getPlace());
-        heroBelong.setText(tem.getState());
-        heroIntroduction.setText(tem.getIntroduction());
-        heroAttack.setText(""+ tem.getForce());
-        heroIntelligence.setText(""+ tem.getIntelligence());
-        heroLeadership.setText(""+ tem.getLeadership());
-        heroFood.setText(""+ tem.getForage());
-        heroImage.setImageResource(tem.getHeroImageId());
+        /*
+         *先从列表中删除信息，修改之后重新添加到列表中
+         */
+        Herolist.remove(hero);
+        imagId = hero.getHeroImageId();
+        heroName.setText(hero.getName());
+        heroSex.setText(hero.getSex());
+        heroBirth.setText(hero.getDate());
+        heroAddress.setText(hero.getPlace());
+        heroBelong.setText(hero.getState());
+        heroIntroduction.setText(hero.getIntroduction());
+        heroAttack.setText(""+ hero.getForce());
+        heroIntelligence.setText(""+ hero.getIntelligence());
+        heroLeadership.setText(""+ hero.getLeadership());
+        heroFood.setText(""+ hero.getForage());
+        heroImage.setImageResource(hero.getHeroImageId());
         /*
          * 从人物详情跳转过来时，人物头像不为空，所以在设置了界面信息之后，需要修改defaultImageId
          * 头像不是默认的图片，修改defaultImageId，使得它不等于默认的图片的id */
