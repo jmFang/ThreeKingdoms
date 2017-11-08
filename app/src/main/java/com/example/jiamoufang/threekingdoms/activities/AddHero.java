@@ -469,7 +469,6 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
                 break;
             }
         }
-
         heroName.setText(tem.getName());
         heroSex.setText(tem.getSex());
         heroBirth.setText(tem.getDate());
