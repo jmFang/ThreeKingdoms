@@ -57,6 +57,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     /*进度条*/
     private ProgressBar progressBar;
     /*是否点击上传或拍照*/
+    private boolean isUpload = false;
     private int defaultImageId;
     /*
     * 图片的路径，作为把图片文件上传到云端的一个必然参数
@@ -206,15 +207,23 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
             return;
         }
 
-        heroImage.setDrawingCacheEnabled(true);
-        Bitmap heroBitmap = Bitmap.createBitmap(heroImage.getDrawingCache());
+
+        /*
+        * 如果是通过拍照或者上传
+        * */
+        if (isUpload) {
+            heroImage.setDrawingCacheEnabled(true);
+            Bitmap heroBitmap = Bitmap.createBitmap(heroImage.getDrawingCache());
+        }
 
         if (defaultImageId == R.mipmap.ic_take_photo) {
             Toast.makeText(this, "人物头像未上传", Toast.LENGTH_SHORT).show();
             return;
         } else {
             Toast.makeText(this, "人物头像已上传", Toast.LENGTH_SHORT).show();
-            heroImage.setDrawingCacheEnabled(false);
+            if(isUpload) {
+                heroImage.setDrawingCacheEnabled(false);
+            }
         }
 
         /*
@@ -228,38 +237,43 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         * 或者上传到云端
         * 这里有点坑啊，图片上传和添加到数据库如果分开写则是异步执行的，把添加动作放进图片上传成功后面执行才可以
         * */
-        final BmobFile bmobFile = new BmobFile(new File(photoPath));
-        final Hero newHero = new Hero( name,bmobFile,sex,birth,address,belong,introducton,Integer.parseInt(attack),
-                Integer.parseInt(intelligence),Integer.parseInt(leadership),Integer.parseInt(food));
-        bmobFile.uploadblock(new UploadFileListener() {
-            @Override
-            public void done(BmobException e) {
-                if(e == null) {
-                    Toast.makeText(AddHero.this, "图片上传成功", Toast.LENGTH_SHORT).show();
-                    uploadToBmob(newHero);
-                } else {
-                    Toast.makeText(AddHero.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+        if (isUpload) {
+            final BmobFile bmobFile = new BmobFile(new File(photoPath));
+            final Hero newHero = new Hero( name,bmobFile,sex,birth,address,belong,introducton,Integer.parseInt(attack),
+                    Integer.parseInt(intelligence),Integer.parseInt(leadership),Integer.parseInt(food));
+            bmobFile.uploadblock(new UploadFileListener() {
+                @Override
+                public void done(BmobException e) {
+                    if(e == null) {
+                        Toast.makeText(AddHero.this, "图片上传成功", Toast.LENGTH_SHORT).show();
+                        uploadToBmob(newHero);
+                    } else {
+                        Toast.makeText(AddHero.this, "图片上传失败", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-            /*
-            * 上传进度，显示进度条，可以美化进度条
-            * */
-            @Override
-            public void onProgress(Integer value) {
-                super.onProgress(value);
-                progressBar.setVisibility(View.VISIBLE);
-                //int progress =  progressBar.getProgress();
-                progressBar.setProgress(value);
-                if (value == 100) {
-                    progressBar.setVisibility(View.INVISIBLE);
+                /*
+                * 上传进度，显示进度条，可以美化进度条
+                * */
+                @Override
+                public void onProgress(Integer value) {
+                    super.onProgress(value);
+                    progressBar.setVisibility(View.VISIBLE);
+                    //int progress =  progressBar.getProgress();
+                    progressBar.setProgress(value);
+                    if (value == 100) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
                 }
-            }
 
-        });
+            });
+        }
+
 
     }
     /*
     * 将新添加的英雄加到云端
+    * 如果是编辑的话，应该更新云端的数据
+    * 因为云端数据把name设置为主键，所以提交整个对象是会重复添加的，应该采用upddate而不是save
     * */
     private void uploadToBmob(Hero newHero) {
         newHero.save(new SaveListener<String>() {
@@ -342,6 +356,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         /*
         * haveTakenPic 初始化为默认的R.mipmap.ic_take_photo,表示图片为上传
         * */
+        isUpload = false;
         defaultImageId = R.mipmap.ic_take_photo;
     }
     /*
@@ -429,7 +444,8 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         /*
         * 已经拿到图片，haveTakenPic置为R.mipmap.ic_take_photo +1;
         * */
-        defaultImageId = R.mipmap.ic_take_photo + 1;
+        defaultImageId = R.mipmap.ic_take_photo+1;
+        isUpload = true;
         /* 设置上传到云端的图片的路径参数*/
         photoPath = imgUri.getPath();
 
