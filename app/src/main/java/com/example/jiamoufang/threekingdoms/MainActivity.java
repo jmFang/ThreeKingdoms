@@ -98,7 +98,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         /*
         * 云端测试
         * */
-        Person p2 = new Person();
+       /* Person p2 = new Person();
         p2.setName("lucky girl ddd");
         p2.setAddress("北京海淀");
         p2.save(new SaveListener<String>() {
@@ -122,7 +122,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     Toast.makeText(MainActivity.this, "查询失败", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
         /*
         * navigationView的选择事件
