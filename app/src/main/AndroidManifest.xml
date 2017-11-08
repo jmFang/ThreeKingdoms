@@ -28,7 +28,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="ThreeKingdoms">
+            android:label="ThreeKingdoms"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +38,8 @@
         </activity>
         <activity android:name=".activities.HeroDetailsActivity" />
         <activity android:name=".activities.AddHero" />
-
+        <activity android:name=".activities.select_hero" />
+        <activity android:name=".activities.search_hero" />
     </application>
 
 </manifest>

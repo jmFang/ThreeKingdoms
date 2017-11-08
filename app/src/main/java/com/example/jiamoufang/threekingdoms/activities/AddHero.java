@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import com.example.jiamoufang.threekingdoms.MainActivity;
 import com.example.jiamoufang.threekingdoms.MyMusic;
 import com.example.jiamoufang.threekingdoms.R;
 import com.example.jiamoufang.threekingdoms.entities.Hero;
+import com.example.jiamoufang.threekingdoms.heros.LocalHero;
 
 import java.io.File;
 
@@ -33,6 +35,8 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
+
+import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
 
 public class AddHero extends AppCompatActivity implements View.OnClickListener{
     private Uri imgUri;
@@ -59,6 +63,11 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     * */
     private String photoPath;
 
+    /*
+    * 区分当前是添加英雄状态还是修改英雄状态
+    * */
+    private int state = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -74,6 +83,14 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         initEvent();
 
         myMusic = new MyMusic(this);
+
+        /*
+         * 编辑英雄信息
+         */
+        if(getIntent().getStringExtra("editHero") != null) {
+            String name = getIntent().getStringExtra("editHero");
+            EditHero(name);
+        }
     }
 
     @Override
@@ -141,7 +158,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         * 籍贯的检查待优化，暂时只检查不为空，待云端数据库做好了再检查籍贯是否存在
         * */
         if (address.length() == 0) {
-            Toast.makeText(this, "籍贯不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "籍贯不能为空，不知则填写不明", Toast.LENGTH_SHORT).show();
             return;
         }
         /*
@@ -426,5 +443,27 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
                 .setCancelable(false)
                 .show();
 
+    }
+
+    private void EditHero(String heroname) {
+        LocalHero tem = Herolist.get(0);
+        for(int i = 0; i < Herolist.size(); i++) {
+            if(heroname.equals(Herolist.get(i).getName())){
+                tem = Herolist.get(i);
+                break;
+            }
+        }
+
+        heroName.setText(tem.getName());
+        heroSex.setText(tem.getSex());
+        heroBirth.setText(tem.getDate());
+        heroAddress.setText(tem.getPlace());
+        heroBelong.setText(tem.getState());
+        heroIntroduction.setText(tem.getIntroduction());
+        heroAttack.setText(""+ tem.getForce());
+        heroIntelligence.setText(""+ tem.getIntelligence());
+        heroLeadership.setText(""+ tem.getLeadership());
+        heroFood.setText(""+ tem.getForage());
+        heroImage.setImageResource(tem.getHeroImageId());
     }
 }
