@@ -57,7 +57,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     /*进度条*/
     private ProgressBar progressBar;
     /*是否点击上传或拍照*/
-    private boolean haveTakenPic;
+    private int defaultImageId;
     /*
     * 图片的路径，作为把图片文件上传到云端的一个必然参数
     * */
@@ -209,7 +209,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         heroImage.setDrawingCacheEnabled(true);
         Bitmap heroBitmap = Bitmap.createBitmap(heroImage.getDrawingCache());
 
-        if (!haveTakenPic) {
+        if (defaultImageId == R.mipmap.ic_take_photo) {
             Toast.makeText(this, "人物头像未上传", Toast.LENGTH_SHORT).show();
             return;
         } else {
@@ -340,9 +340,9 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         submit = (Button) findViewById(R.id.add_hero_submit);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         /*
-        * haveTakenPic 初始化为false,表示图片为上传
+        * haveTakenPic 初始化为默认的R.mipmap.ic_take_photo,表示图片为上传
         * */
-        haveTakenPic = false;
+        defaultImageId = R.mipmap.ic_take_photo;
     }
     /*
     * 事件注册
@@ -427,9 +427,9 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         heroImage.setImageBitmap(bmp);
 
         /*
-        * 已经拿到图片，haveTakenPic置为true
+        * 已经拿到图片，haveTakenPic置为R.mipmap.ic_take_photo +1;
         * */
-        haveTakenPic = true;
+        defaultImageId = R.mipmap.ic_take_photo + 1;
         /* 设置上传到云端的图片的路径参数*/
         photoPath = imgUri.getPath();
 
@@ -465,5 +465,9 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         heroLeadership.setText(""+ tem.getLeadership());
         heroFood.setText(""+ tem.getForage());
         heroImage.setImageResource(tem.getHeroImageId());
+        /*
+         * 从人物详情跳转过来时，人物头像不为空，所以在设置了界面信息之后，需要修改defaultImageId
+         * 头像不是默认的图片，修改defaultImageId，使得它不等于默认的图片的id */
+        defaultImageId = R.mipmap.ic_take_photo + 1;
     }
 }
