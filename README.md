@@ -84,6 +84,48 @@ Android手机平台应用开发课程期中项目作业
 
 所以需要下载到本地，手机储存起来，再从手机读取。
 
+区别：
+
+hero/LocalHero.java：
+
+```
+    private String name;   //姓名
+    
+    private int heroImageId;
+    
+    private String sex;     //性别
+    private String date;    //出生日期
+    private String place;   //籍贯
+    private String state;   //主校势力
+    private String introduction;    //简介
+
+    private int force;  //武力值(0~100)
+    private int intelligence;  //智力值(0~100)
+    private int leadership;   //统率值(0~100)
+    private int army;   //军队数量:有统率值决定
+    private int forage; // 粮草数量(0~1000)
+```
+
+entities/Hero.java:
+
+```
+    private String name;   //姓名
+    
+    private BmobFile heroImage;
+    
+    private String sex;     //性别
+    private String date;    //出生日期
+    private String place;   //籍贯
+    private String state;   //主校势力
+    private String introduction;    //简介
+
+    private int force;  //武力值(0~100)
+    private int intelligence;  //智力值(0~100)
+    private int leadership;   //统率值(0~100)
+    private int army;   //军队数量:有统率值决定
+    private int forage; // 粮草数量(0~1000)
+```
+
 ### 云端数据库
 
 Bmob云端数据库也是一种面向对象的关系映射模型下的数据库，数据操作请自行查阅Bmob官方开发文档。
