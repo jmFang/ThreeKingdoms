@@ -145,8 +145,5 @@ public class HerosPKFragment extends Fragment {
                 user2_text.setText(text);
             }
         }
-
-
     }
-
 }

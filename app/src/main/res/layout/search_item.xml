@@ -6,24 +6,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:paddingTop="15dp"
+        android:src="@drawable/guanyu"
+        android:layout_centerInParent="true"/>
+
     <TextView
         android:id="@+id/name"
-        android:layout_width="80dp"
-        android:layout_height="90dp"
-        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/image"
         android:text="关羽"
-        android:textColor="#000000"
-        android:textSize="25sp" />
+        android:paddingLeft="20dp"
+        android:paddingTop="5dp"
+        android:textColor="#D3D3D3"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/detail"
         android:layout_width="0dp"
-        android:layout_height="90dp"
-        android:padding="5dp"
-        android:text="关羽，男，字：云长，生卒：？-219年，籍贯：司隶河东郡解（山西运城市临猗县西南），主要效力势力：蜀"
-        android:textColor="#000000"
+        android:layout_height="100dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="30dp"
+        android:text="男，字：云长，生卒：？-219年，籍贯：司隶河东郡解（山西运城市临猗县西南），主要效力势力：蜀"
+        android:textColor="#D3D3D3"
         android:textSize="18sp"
-        app:layout_constraintLeft_toRightOf="@+id/name"
+        app:layout_constraintLeft_toRightOf="@+id/image"
         app:layout_constraintRight_toRightOf="parent"/>
-
 </android.support.constraint.ConstraintLayout>
+
+
+

@@ -28,13 +28,14 @@ public class search_hero extends AppCompatActivity {
 
         searchList = (ListView)findViewById(R.id.search_items);
         final SimpleAdapter simpleAdapter = new SimpleAdapter(search_hero.this, headerlist, R.layout.search_item,
-                new String[]{"name", "detail"}, new int[]{R.id.name, R.id.detail});
+                new String[]{"image","name", "detail"}, new int[]{R.id.image,R.id.name, R.id.detail});
         searchList.setAdapter(simpleAdapter);
 
 
         Map<String, Object> temp = new LinkedHashMap<>();
+        temp.put("image", "drawable/guanyu");
         temp.put("name", "关羽");
-        temp.put("detail", "子云长，脸很红，胡子长");
+        temp.put("detail", "男，字：云长，生卒：？-219年，籍贯：司隶河东郡解（山西运城市临猗县西南），主要效力势力：蜀");
         headerlist.add(temp);
 
         //实际上要根据searchItems更新视图

@@ -33,7 +33,7 @@ public class select_hero extends AppCompatActivity {
         InitListView();
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(select_hero.this, headerlist, R.layout.select_item,
-                new String[]{"name", "detail"}, new int[]{R.id.name, R.id.detail});
+                new String[]{"image","name", "detail"}, new int[]{R.id.image, R.id.name, R.id.detail});
         selectList = (ListView) findViewById(R.id.select_items);
         selectList.setAdapter(simpleAdapter);
 
@@ -52,6 +52,7 @@ public class select_hero extends AppCompatActivity {
     private void InitListView() {
         for(int i = 0; i < Herolist.size(); i++) {
             Map<String, Object> temp = new LinkedHashMap<>();
+            temp.put("image", Herolist.get(i).getHeroImageId());
             temp.put("name", Herolist.get(i).getName());
             temp.put("detail", "武力:" + Herolist.get(i).getForce() + " 智力" + Herolist.get(i).getIntelligence() + " 统率" + Herolist.get(i).getLeadership()
                     + "\n军队" +  Herolist.get(i).getArmy() + " 粮草" + Herolist.get(i).getForage());
