@@ -26,6 +26,10 @@ Android手机平台应用开发课程期中项目作业
     public static List<LocalHero> MylovedHeros = new ArrayList<>();
     
 ```
+### 对决记录存取操作已完成，考虑优化：同步更新（多线程、或广播、或服务）
+
+### LocalHero 存取操作已完成，考虑优化：同步更新
+
 
 ## 本地数据库存取
 
@@ -40,9 +44,8 @@ Android手机平台应用开发课程期中项目作业
     MyHero.java  //这个还未添加，用于‘我的英雄’
     NonEditedHeros.java // 表示那些还没被编辑的英雄
 ```
-### 写回数据库
 
-在 主活动的 ``OnDestory ``方法将所有的修改写回数据库。  **下次打开APP时判断从数据库读取**
+## 注意查看 api 目录下的 apiOfDatabase，提供了数据库操作方法，数据库操作方法尽可能都写在这个文件里！！！
 
 # Get Started
 
