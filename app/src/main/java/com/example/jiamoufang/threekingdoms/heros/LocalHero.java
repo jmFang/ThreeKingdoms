@@ -27,8 +27,7 @@ public class LocalHero extends DataSupport{
     private int leadership;   //统率值(0~100)
     private int army;   //军队数量:有统率值决定
     private int forage; // 粮草数量(0~1000)
-
-
+    
     /*
     * 下面这个构造函数用于初始化时使用，直接使用heroImageId比较方便
     * */

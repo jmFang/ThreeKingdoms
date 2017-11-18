@@ -23,13 +23,6 @@
                 android:textColor="#212121"
                 android:text="2017-11-05:14:30-22"
                 android:id="@+id/text_record_time"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:id="@+id/text_record_users"
-                android:textColor="#212121"
-                android:text="卡卡西 VS 猪猪侠"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,21 +34,26 @@
                 android:layout_height="wrap_content"
                 android:textColor="#212121"
                 android:text="关羽 VS 张飞"
+                android:textSize="14sp"
                 android:id="@+id/text_record_heros" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="8dp"
+                android:textSize="14sp"
                 android:id="@+id/text_record_result"
                 android:text="三十回合下关羽险胜"
                 android:textColor="#212121"/>
         </LinearLayout>
     </LinearLayout>
 
-    <ImageButton
+    <TextView
         android:id="@+id/img_record_moore"
         android:layout_width="26dp"
+        android:text="更多"
+        android:layout_marginLeft="4dp"
+        android:textSize="12sp"
         android:layout_height="match_parent"
-        android:layout_gravity="end|center_vertical"
-        android:src="@mipmap/ic_more" />
+        android:gravity="center_vertical"
+        android:layout_gravity="end" />
 </LinearLayout>

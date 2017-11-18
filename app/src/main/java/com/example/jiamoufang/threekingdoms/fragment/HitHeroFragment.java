@@ -14,6 +14,8 @@ import com.example.jiamoufang.threekingdoms.adapter.PKRecordAdapter;
 import com.example.jiamoufang.threekingdoms.entities.PkRecords;
 import com.oragee.banners.BannerView;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,9 +73,12 @@ public class HitHeroFragment extends Fragment {
     * PKRecords的构造函数参数：String usernameA, String usernameB, String heroNameA, String heroNameB, String PKresult, String PKtime
     * */
     private void initRecords() {
-        PkRecords pkrcs = new PkRecords("马化腾","马云","关羽","张飞","张飞胜了关羽","今日:15:30:44");
-        for (int i = 0;i < 10; i++) {
-            pkRecordsList.add(pkrcs);
+        List<PkRecords> tmp = DataSupport.findAll(PkRecords.class);
+        pkRecordsList.clear();
+       // PkRecords pkrcs = new PkRecords("关羽","张飞","张飞胜了关羽","今日:15:30:44");
+        for (int i = 0;i < tmp.size(); i++) {
+            if (i < 10)
+                pkRecordsList.add(tmp.get(i));
         }
     }
 }

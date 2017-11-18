@@ -10,16 +10,12 @@ import java.util.Date;
  */
 
 public class PkRecords extends DataSupport {
-    private String usernameA;
-    private String usernameB;
     private String heroNameA;
     private String heroNameB;
     private String PKresult;
     private String PKtime;
 
-    public PkRecords(String usernameA, String usernameB, String heroNameA, String heroNameB, String PKresult, String PKtime) {
-        this.usernameA = usernameA;
-        this.usernameB = usernameB;
+    public PkRecords(String heroNameA, String heroNameB, String PKresult, String PKtime) {
         this.heroNameA = heroNameA;
         this.heroNameB = heroNameB;
         this.PKresult = PKresult;
@@ -41,11 +37,4 @@ public class PkRecords extends DataSupport {
         return PKresult;
     }
 
-    public String getUsernameA() {
-        return usernameA;
-    }
-
-    public String getUsernameB() {
-        return usernameB;
-    }
 }

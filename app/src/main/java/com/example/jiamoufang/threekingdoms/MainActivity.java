@@ -277,6 +277,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mImgHeroPk = (ImageButton) findViewById(R.id.id_tab_heros_pk_img);
         mImgHeroList = (ImageButton) findViewById(R.id.id_tab_herolist_img);
 
+        mImgHeroHit.setImageResource(R.mipmap.tab_weixin_pressed);
+        mImgHeroPk.setImageResource(R.mipmap.tab_find_frd_normal);
+        mImgHeroList.setImageResource(R.mipmap.tab_settings_normal);
         //mTab01 = new HitHeroFragment();
        // mTab02 = new HerosPKFragment();
         //mTab03 = new HerosListFragment();
@@ -287,12 +290,21 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         switch (v.getId()) {
             case R.id.id_tab_hit_hero:
+                mImgHeroHit.setImageResource(R.mipmap.tab_weixin_pressed);
+                mImgHeroPk.setImageResource(R.mipmap.tab_find_frd_normal);
+                mImgHeroList.setImageResource(R.mipmap.tab_settings_normal);
                 setSelect(0);
                 break;
             case R.id.id_tab_heros_pk:
+                mImgHeroHit.setImageResource(R.mipmap.tab_weixin_normal);
+                mImgHeroPk.setImageResource(R.mipmap.tab_find_frd_pressed);
+                mImgHeroList.setImageResource(R.mipmap.tab_settings_normal);
                 setSelect(1);
                 break;
             case R.id.id_tab_herolist:
+                mImgHeroHit.setImageResource(R.mipmap.tab_weixin_normal);
+                mImgHeroPk.setImageResource(R.mipmap.tab_find_frd_normal);
+                mImgHeroList.setImageResource(R.mipmap.tab_settings_pressed);
                 setSelect(2);
                 break;
             case R.id.nav_icon_image:
@@ -406,6 +418,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             Herolist.add(new LocalHero("周瑜",R.drawable.zhouyu,"男","????", "出生地","蜀","历史简介：\n 前将军。本字长生，亡命奔涿郡。与张飞追随刘备征战，当刘备为平原相时，他们俩为别部司马。二人与刘备寝则同床，恩若兄弟。稠人广坐则侍立终日。随同曹操和刘备讨吕布于下邳，事后为朝廷封为中郎将。当刘备袭杀曹操的徐州刺史车冑后，以关羽镇下邳太守。曹操东征破刘备，关羽被俘，被拜为偏将军，对他礼遇很优厚。白马之战时关羽万军中刺敌主帅颜良，被封为汉寿亭侯，报了曹操之恩后便告辞，寻找刘备。长阪之战刘备败北，抄近路赴汉津与关羽的数百只船汇合至江夏。赤壁之战孙刘联军胜利后，关羽在其后的江陵之战中绝北道，阻隔曹操的援军，为周瑜能攻下江陵创造有利的条件。事后遙领襄阳太守、拜为荡寇将军。诸葛亮等人入蜀增援刘备，关羽便镇荊州。刘备自立为汉中王，被拜为前将军，假节钺。关羽乘汉水暴涨之机出兵襄樊，更在于禁七军为水所淹乘船进攻，梁、郏、陆浑各县的盗贼有些远远地领受了关羽的官印封号，威震华夏；曹操一度想迁都避其锋芒。后因孙权背盟投曹，后方为吕蒙所破，关羽便退兵，但终为孙权军所擒杀。"
                     ,80, 90, 90, 900));
         } else {
+            Herolist.clear();
             for (int i = 0; i < tmp.size(); i++) {
                 /*只显示8条
                 * 其它用于搜索
@@ -447,6 +460,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             NonEditedHeroList.add(new NonEditedHero("孙坚",R.drawable.sunjian));
             NonEditedHeroList.add(new NonEditedHero("孙权",R.drawable.sunquan));
         } else {
+            NonEditedHeroList.clear();
             NonEditedHeroList = tmp;
         }
 

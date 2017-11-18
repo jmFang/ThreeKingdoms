@@ -32,11 +32,9 @@ public class PKRecordAdapter extends ArrayAdapter {
         PkRecords pkRecords = (PkRecords) getItem(position); // fetch current object
         View view = LayoutInflater.from(getContext()).inflate(resourceId, parent,false);
         TextView text_record_time = (TextView) view.findViewById(R.id.text_record_time);
-        TextView text_record_users = (TextView) view.findViewById(R.id.text_record_users);
         TextView text_record_heros = (TextView) view.findViewById(R.id.text_record_heros);
         TextView text_record_result = (TextView) view.findViewById(R.id.text_record_result);
         text_record_time.setText(pkRecords.getPKtime());
-        text_record_users.setText(pkRecords.getUsernameA() + " VS " + pkRecords.getUsernameB());
         text_record_heros.setText(pkRecords.getHeroNameA() + " VS " + pkRecords.getHeroNameB());
         text_record_result.setText(pkRecords.getPKresult());
         return view;
