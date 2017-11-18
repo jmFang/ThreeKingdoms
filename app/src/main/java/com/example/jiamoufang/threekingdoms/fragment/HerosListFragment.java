@@ -54,8 +54,7 @@ public class HerosListFragment extends Fragment {
 
     }
 
-
-
+    
     private void initHeros() {
         mHerosList.clear();
         for (int i = 0; i < Herolist.size(); i++) {

@@ -32,9 +32,15 @@ import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
 public class HeroDetailsActivity extends AppCompatActivity {
     public static final String HERO_NAME = "heroName";
     public static final String HERO_IMAGE_ID = "heroImageId";
+    //public static final String HERO_IMAGE_BYTES = "heroImageBytes";
     private MyMusic myMusic;
     private Toolbar toolbar;
     private String heroName;
+    private  CollapsingToolbarLayout collapsingToolbarLayout;
+    private  CoordinatorLayout coordinatorlayout;
+    private  ImageView heroImage;
+    private TextView heroTextContent;
+    private TextView info_heroDetails;
     private int sig = 0;
 
     @Override
@@ -46,12 +52,18 @@ public class HeroDetailsActivity extends AppCompatActivity {
         heroName = intent.getStringExtra(HERO_NAME);
         int heroImageId = intent.getIntExtra(HERO_IMAGE_ID,0);
         String introduction = intent.getStringExtra("introduction");
+        String birth = intent.getStringExtra("birth");
+        String address = intent.getStringExtra("address");
+        String sex = intent.getStringExtra("sex");
+        String belong = intent.getStringExtra("belong");
+
 
         toolbar = (Toolbar)findViewById(R.id.toolbar_heroDetails);
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collaspsing_heroDetails);
-        CoordinatorLayout coordinatorlayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
-        ImageView heroImage = (ImageView)findViewById(R.id.iamge_hero_details);
-        TextView heroTextContent = (TextView)findViewById(R.id.textView_heroDetails);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collaspsing_heroDetails);
+        coordinatorlayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
+        heroImage = (ImageView)findViewById(R.id.iamge_hero_details);
+        heroTextContent = (TextView)findViewById(R.id.textView_heroDetails);
+        info_heroDetails = (TextView) findViewById(R.id.info_heroDetails);
 
         setSupportActionBar(toolbar);
 
@@ -64,8 +76,9 @@ public class HeroDetailsActivity extends AppCompatActivity {
 
         collapsingToolbarLayout.setTitle(heroName);
         Glide.with(this).load(heroImageId).into(heroImage);
-        coordinatorlayout.setBackgroundResource(heroImageId);
+       coordinatorlayout.setBackgroundResource(heroImageId);
         heroTextContent.setText(introduction);
+        info_heroDetails.setText(sex + ", 生卒：" + birth +", 籍贯：" +  address + ", 主校势力：" + belong);
 
         myMusic = new MyMusic(this);
     }
@@ -118,6 +131,9 @@ public class HeroDetailsActivity extends AppCompatActivity {
                                 break;
                             }
                         }
+                        /*
+                        * 只有finish是不行的，自己再想想
+                        * */
                         finish();
                     }
                 });
@@ -128,5 +144,53 @@ public class HeroDetailsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 3:
+                if (resultCode == RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    String name = bundle.getString("name");
+                    int index = -1;
+                    for (int i = 0; i < Herolist.size(); i++) {
+                        if (Herolist.get(i).getName().equals(name)) {
+                            index = 0;
+                            break;
+                        }
+                    }
+                    /*修改数据*/
+                    LocalHero localHero = Herolist.get(index);
+                    localHero.setName(name);
+                    localHero.setSex(bundle.getString("sex"));
+                    localHero.setDate(bundle.getString("birth"));
+                    localHero.setPlace(bundle.getString("address"));
+                    localHero.setState(bundle.getString("belong"));
+                    localHero.setForce(Integer.parseInt(bundle.getString("attack")));
+                    localHero.setIntelligence(Integer.parseInt(bundle.getString("intelligence")));
+                    localHero.setLeadership(Integer.parseInt(bundle.getString("leadership")));
+                    localHero.setForage(Integer.parseInt(bundle.getString("food")));
+                    localHero.setArmy();
+                    localHero.setIntroduction(bundle.getString("introduction"));
+                    localHero.setHeroImageId(bundle.getInt("imageId"));
+                    Herolist.remove(index);
+                    Herolist.add(index,localHero);
+                    /*重新渲染*/
+                    heroName = name;
+                    collapsingToolbarLayout.setTitle(heroName);
+                    Glide.with(this).load(bundle.getInt("imageId")).into(heroImage);
+                    coordinatorlayout.setBackgroundResource(bundle.getInt("imageId"));
+                    heroTextContent.setText(bundle.getString("introduction"));
+                    info_heroDetails.setText(bundle.getString("sex")+ ", 生卒：" + bundle.getString("birth") + ", 籍贯：" + bundle.getString("address")
+                            + ", 主校势力：" + bundle.getString("belong"));
+
+                }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

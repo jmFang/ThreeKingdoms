@@ -19,8 +19,8 @@
     <!-- 读取SD卡的权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
+        android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
         android:icon="@drawable/guanyu"
         android:label="@string/app_name"
@@ -29,7 +29,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="ThreeKingdoms"
+            android:label="三国志"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,6 +41,7 @@
         <activity android:name=".activities.AddHero" />
         <activity android:name=".activities.select_hero" />
         <activity android:name=".activities.search_hero" />
+        <activity android:name=".activities.SelectHeroToEdite"></activity>
     </application>
 
 </manifest>

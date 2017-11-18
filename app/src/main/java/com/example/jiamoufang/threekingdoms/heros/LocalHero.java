@@ -1,12 +1,20 @@
 package com.example.jiamoufang.threekingdoms.heros;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import com.example.jiamoufang.threekingdoms.R;
+import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
+
+import org.litepal.crud.DataSupport;
+
 import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by jiamoufang on 2017/11/7.
  */
 
-public class LocalHero {
+public class LocalHero extends DataSupport{
     private String name;   //姓名
     private int heroImageId;
     private String sex;     //性别
@@ -14,13 +22,16 @@ public class LocalHero {
     private String place;   //籍贯
     private String state;   //主校势力
     private String introduction;    //简介
-
     private int force;  //武力值(0~100)
     private int intelligence;  //智力值(0~100)
     private int leadership;   //统率值(0~100)
     private int army;   //军队数量:有统率值决定
     private int forage; // 粮草数量(0~1000)
 
+
+    /*
+    * 下面这个构造函数用于初始化时使用，直接使用heroImageId比较方便
+    * */
     public LocalHero(String name, int heroImageId, String sex, String date, String place, String state, String introduction,
                 int force, int intelligence, int leadership, int forage) {
         this.name = name;
@@ -126,11 +137,11 @@ public class LocalHero {
         this.army = leadership * 1000;
     }
 
-    public void setArmy(Integer army) {
-        this.army = army;
+    public void setArmy( ) {
+        this.army = leadership * 1000;;
     }
 
-    public void setForage() {
+    public void setForage(int forage) {
         this.forage = forage;
     }
 

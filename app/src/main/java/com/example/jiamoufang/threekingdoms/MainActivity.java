@@ -2,6 +2,8 @@ package com.example.jiamoufang.threekingdoms;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,14 +18,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.jiamoufang.threekingdoms.activities.AddHero;
+import com.example.jiamoufang.threekingdoms.adapter.SelectHeroToEditorAdapter;
+import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
+import com.example.jiamoufang.threekingdoms.entities.NonEditedHero;
 import com.example.jiamoufang.threekingdoms.entities.Person;
 import com.example.jiamoufang.threekingdoms.fragment.HerosListFragment;
 import com.example.jiamoufang.threekingdoms.fragment.HerosPKFragment;
 import com.example.jiamoufang.threekingdoms.fragment.HitHeroFragment;
 import com.example.jiamoufang.threekingdoms.heros.LocalHero;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +49,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     * 有几个activity都需要访问这个变量，通过设置为static的方式方便访问
     * 唯一标识，设置变量的时候注意一下应该不会出错
     * */
-    public static List<LocalHero> Herolist = new ArrayList<LocalHero>();
+    public static List<LocalHero> Herolist = new ArrayList<>();
+
+    /*尚未编辑的英雄，在添加界面可供选择编辑添加*/
+    public static List<NonEditedHero> NonEditedHeroList = new ArrayList<>();
+
+    /*英雄对决记录，在群英会界面使用，每次对决添加*/
 
     private DrawerLayout mDrawerLayout;
 
@@ -85,10 +98,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         nav_headerView = navigationView.getHeaderView(0);
         nav_headerImg = nav_headerView.findViewById(R.id.nav_icon_image);
 
+        /*创建本地数据库*/
+        LitePal.getDatabase();
+
         /*
         * 实例化几个Localhero类
         * */
         InitAddHeros();
+
+        /*
+        * 实例化尚未编辑的英雄
+        * */
+        InitNonEditedHeros();
 
         /*
         * 初始化云端
@@ -180,6 +201,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initView();
         initEvent();
     }
+
 
     private void setSelect(final int i) {
         FragmentManager fm = getSupportFragmentManager();
@@ -368,11 +390,45 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 ,100, 60, 70, 900));
         Herolist.add(new LocalHero("许褚", R.drawable.xuchu,"男","????", "出生地","蜀","历史简介：\n 前将军。本字长生，亡命奔涿郡。与张飞追随刘备征战，当刘备为平原相时，他们俩为别部司马。二人与刘备寝则同床，恩若兄弟。稠人广坐则侍立终日。随同曹操和刘备讨吕布于下邳，事后为朝廷封为中郎将。当刘备袭杀曹操的徐州刺史车冑后，以关羽镇下邳太守。曹操东征破刘备，关羽被俘，被拜为偏将军，对他礼遇很优厚。白马之战时关羽万军中刺敌主帅颜良，被封为汉寿亭侯，报了曹操之恩后便告辞，寻找刘备。长阪之战刘备败北，抄近路赴汉津与关羽的数百只船汇合至江夏。赤壁之战孙刘联军胜利后，关羽在其后的江陵之战中绝北道，阻隔曹操的援军，为周瑜能攻下江陵创造有利的条件。事后遙领襄阳太守、拜为荡寇将军。诸葛亮等人入蜀增援刘备，关羽便镇荊州。刘备自立为汉中王，被拜为前将军，假节钺。关羽乘汉水暴涨之机出兵襄樊，更在于禁七军为水所淹乘船进攻，梁、郏、陆浑各县的盗贼有些远远地领受了关羽的官印封号，威震华夏；曹操一度想迁都避其锋芒。后因孙权背盟投曹，后方为吕蒙所破，关羽便退兵，但终为孙权军所擒杀。"
                 ,95, 70, 75, 900));
-        Herolist.add(new LocalHero("颜良", R.drawable.yanliang,"男","????", "出生地","蜀","历史简介：\n 前将军。本字长生，亡命奔涿郡。与张飞追随刘备征战，当刘备为平原相时，他们俩为别部司马。二人与刘备寝则同床，恩若兄弟。稠人广坐则侍立终日。随同曹操和刘备讨吕布于下邳，事后为朝廷封为中郎将。当刘备袭杀曹操的徐州刺史车冑后，以关羽镇下邳太守。曹操东征破刘备，关羽被俘，被拜为偏将军，对他礼遇很优厚。白马之战时关羽万军中刺敌主帅颜良，被封为汉寿亭侯，报了曹操之恩后便告辞，寻找刘备。长阪之战刘备败北，抄近路赴汉津与关羽的数百只船汇合至江夏。赤壁之战孙刘联军胜利后，关羽在其后的江陵之战中绝北道，阻隔曹操的援军，为周瑜能攻下江陵创造有利的条件。事后遙领襄阳太守、拜为荡寇将军。诸葛亮等人入蜀增援刘备，关羽便镇荊州。刘备自立为汉中王，被拜为前将军，假节钺。关羽乘汉水暴涨之机出兵襄樊，更在于禁七军为水所淹乘船进攻，梁、郏、陆浑各县的盗贼有些远远地领受了关羽的官印封号，威震华夏；曹操一度想迁都避其锋芒。后因孙权背盟投曹，后方为吕蒙所破，关羽便退兵，但终为孙权军所擒杀。"
+        Herolist.add(new LocalHero("颜良",  R.drawable.yanliang,"男","????", "出生地","蜀","历史简介：\n 前将军。本字长生，亡命奔涿郡。与张飞追随刘备征战，当刘备为平原相时，他们俩为别部司马。二人与刘备寝则同床，恩若兄弟。稠人广坐则侍立终日。随同曹操和刘备讨吕布于下邳，事后为朝廷封为中郎将。当刘备袭杀曹操的徐州刺史车冑后，以关羽镇下邳太守。曹操东征破刘备，关羽被俘，被拜为偏将军，对他礼遇很优厚。白马之战时关羽万军中刺敌主帅颜良，被封为汉寿亭侯，报了曹操之恩后便告辞，寻找刘备。长阪之战刘备败北，抄近路赴汉津与关羽的数百只船汇合至江夏。赤壁之战孙刘联军胜利后，关羽在其后的江陵之战中绝北道，阻隔曹操的援军，为周瑜能攻下江陵创造有利的条件。事后遙领襄阳太守、拜为荡寇将军。诸葛亮等人入蜀增援刘备，关羽便镇荊州。刘备自立为汉中王，被拜为前将军，假节钺。关羽乘汉水暴涨之机出兵襄樊，更在于禁七军为水所淹乘船进攻，梁、郏、陆浑各县的盗贼有些远远地领受了关羽的官印封号，威震华夏；曹操一度想迁都避其锋芒。后因孙权背盟投曹，后方为吕蒙所破，关羽便退兵，但终为孙权军所擒杀。"
                 ,97, 80, 80, 900));
         Herolist.add(new LocalHero("张飞", R.drawable.zhangfei,"男","????", "出生地","蜀","历史简介：\n 前将军。本字长生，亡命奔涿郡。与张飞追随刘备征战，当刘备为平原相时，他们俩为别部司马。二人与刘备寝则同床，恩若兄弟。稠人广坐则侍立终日。随同曹操和刘备讨吕布于下邳，事后为朝廷封为中郎将。当刘备袭杀曹操的徐州刺史车冑后，以关羽镇下邳太守。曹操东征破刘备，关羽被俘，被拜为偏将军，对他礼遇很优厚。白马之战时关羽万军中刺敌主帅颜良，被封为汉寿亭侯，报了曹操之恩后便告辞，寻找刘备。长阪之战刘备败北，抄近路赴汉津与关羽的数百只船汇合至江夏。赤壁之战孙刘联军胜利后，关羽在其后的江陵之战中绝北道，阻隔曹操的援军，为周瑜能攻下江陵创造有利的条件。事后遙领襄阳太守、拜为荡寇将军。诸葛亮等人入蜀增援刘备，关羽便镇荊州。刘备自立为汉中王，被拜为前将军，假节钺。关羽乘汉水暴涨之机出兵襄樊，更在于禁七军为水所淹乘船进攻，梁、郏、陆浑各县的盗贼有些远远地领受了关羽的官印封号，威震华夏；曹操一度想迁都避其锋芒。后因孙权背盟投曹，后方为吕蒙所破，关羽便退兵，但终为孙权军所擒杀。"
                 ,97, 75, 85, 900));
-        Herolist.add(new LocalHero("周瑜", R.drawable.zhouyu,"男","????", "出生地","蜀","历史简介：\n 前将军。本字长生，亡命奔涿郡。与张飞追随刘备征战，当刘备为平原相时，他们俩为别部司马。二人与刘备寝则同床，恩若兄弟。稠人广坐则侍立终日。随同曹操和刘备讨吕布于下邳，事后为朝廷封为中郎将。当刘备袭杀曹操的徐州刺史车冑后，以关羽镇下邳太守。曹操东征破刘备，关羽被俘，被拜为偏将军，对他礼遇很优厚。白马之战时关羽万军中刺敌主帅颜良，被封为汉寿亭侯，报了曹操之恩后便告辞，寻找刘备。长阪之战刘备败北，抄近路赴汉津与关羽的数百只船汇合至江夏。赤壁之战孙刘联军胜利后，关羽在其后的江陵之战中绝北道，阻隔曹操的援军，为周瑜能攻下江陵创造有利的条件。事后遙领襄阳太守、拜为荡寇将军。诸葛亮等人入蜀增援刘备，关羽便镇荊州。刘备自立为汉中王，被拜为前将军，假节钺。关羽乘汉水暴涨之机出兵襄樊，更在于禁七军为水所淹乘船进攻，梁、郏、陆浑各县的盗贼有些远远地领受了关羽的官印封号，威震华夏；曹操一度想迁都避其锋芒。后因孙权背盟投曹，后方为吕蒙所破，关羽便退兵，但终为孙权军所擒杀。"
+        Herolist.add(new LocalHero("周瑜",R.drawable.zhouyu,"男","????", "出生地","蜀","历史简介：\n 前将军。本字长生，亡命奔涿郡。与张飞追随刘备征战，当刘备为平原相时，他们俩为别部司马。二人与刘备寝则同床，恩若兄弟。稠人广坐则侍立终日。随同曹操和刘备讨吕布于下邳，事后为朝廷封为中郎将。当刘备袭杀曹操的徐州刺史车冑后，以关羽镇下邳太守。曹操东征破刘备，关羽被俘，被拜为偏将军，对他礼遇很优厚。白马之战时关羽万军中刺敌主帅颜良，被封为汉寿亭侯，报了曹操之恩后便告辞，寻找刘备。长阪之战刘备败北，抄近路赴汉津与关羽的数百只船汇合至江夏。赤壁之战孙刘联军胜利后，关羽在其后的江陵之战中绝北道，阻隔曹操的援军，为周瑜能攻下江陵创造有利的条件。事后遙领襄阳太守、拜为荡寇将军。诸葛亮等人入蜀增援刘备，关羽便镇荊州。刘备自立为汉中王，被拜为前将军，假节钺。关羽乘汉水暴涨之机出兵襄樊，更在于禁七军为水所淹乘船进攻，梁、郏、陆浑各县的盗贼有些远远地领受了关羽的官印封号，威震华夏；曹操一度想迁都避其锋芒。后因孙权背盟投曹，后方为吕蒙所破，关羽便退兵，但终为孙权军所擒杀。"
                 ,80, 90, 90, 900));
+    }
+
+    private void InitNonEditedHeros() {
+        NonEditedHeroList.add(new NonEditedHero("左慈",R.drawable.zuoci));
+        NonEditedHeroList.add(new NonEditedHero("祖茂",R.drawable.zumao));
+        NonEditedHeroList.add(new NonEditedHero("诸葛瑾",R.drawable.zhugejin));
+        NonEditedHeroList.add(new NonEditedHero("诸葛均",R.drawable.zhugejun));
+        NonEditedHeroList.add(new NonEditedHero("朱灵",R.drawable.zhuling));
+        NonEditedHeroList.add(new NonEditedHero("周仓",R.drawable.zhoucang));
+        NonEditedHeroList.add(new NonEditedHero("钟繇",R.drawable.zhongyao));
+        NonEditedHeroList.add(new NonEditedHero("曹植",R.drawable.caozhi));
+        NonEditedHeroList.add(new NonEditedHero("曹丕",R.drawable.caopi));
+        NonEditedHeroList.add(new NonEditedHero("鲁肃",R.drawable.lusu));
+        NonEditedHeroList.add(new NonEditedHero("陆逊",R.drawable.luxun));
+        NonEditedHeroList.add(new NonEditedHero("吕蒙",R.drawable.lvmeng));
+        NonEditedHeroList.add(new NonEditedHero("张辽",R.drawable.zhangliao));
+        NonEditedHeroList.add(new NonEditedHero("华雄",R.drawable.huaxiong));
+        NonEditedHeroList.add(new NonEditedHero("孙坚",R.drawable.sunjian));
+        NonEditedHeroList.add(new NonEditedHero("孙权",R.drawable.sunquan));
+
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+
+        /*
+        * 退出之前将修改的数据写入数据库
+        * 包括三个List：尚未编辑的英雄、对决记录、已经编辑的英雄
+        * */
+
+
+        super.onDestroy();
     }
 }

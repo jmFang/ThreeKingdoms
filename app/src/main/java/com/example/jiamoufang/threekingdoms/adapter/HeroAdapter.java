@@ -2,6 +2,7 @@ package com.example.jiamoufang.threekingdoms.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -59,6 +60,10 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
                 intent.putExtra(HeroDetailsActivity.HERO_NAME, hero.getName());
                 intent.putExtra(HeroDetailsActivity.HERO_IMAGE_ID,hero.getHeroImageId());
                 intent.putExtra("introduction", hero.getIntroduction());
+                intent.putExtra("sex", hero.getSex());
+                intent.putExtra("birth", hero.getDate());
+                intent.putExtra("address", hero.getPlace());
+                intent.putExtra("belong", hero.getState());
                 mContext.startActivity(intent);
             }
         });

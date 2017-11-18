@@ -1,5 +1,7 @@
 package com.example.jiamoufang.threekingdoms.entities;
 
+import org.litepal.crud.DataSupport;
+
 import java.sql.Time;
 import java.util.Date;
 
@@ -7,7 +9,7 @@ import java.util.Date;
  * Created by jiamoufang on 2017/11/5.
  */
 
-public class PkRecords {
+public class PkRecords extends DataSupport {
     private String usernameA;
     private String usernameB;
     private String heroNameA;

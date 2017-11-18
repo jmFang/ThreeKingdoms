@@ -57,7 +57,7 @@
                     android:id="@+id/info_heroDetails"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textColor="#212121"
                     android:layout_margin="10dp"
                     android:text="男 生卒:？？？ 籍贯:河南洛阳 主效势力:群雄"/>
