@@ -208,7 +208,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initEvent();
     }
 
-
     private void setSelect(final int i) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
