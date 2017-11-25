@@ -4,14 +4,10 @@ package com.example.jiamoufang.threekingdoms.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +21,6 @@ import com.example.jiamoufang.threekingdoms.activities.select_hero;
 import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
 import com.example.jiamoufang.threekingdoms.entities.PkRecords;
 import com.example.jiamoufang.threekingdoms.heros.LocalHero;
-
-import java.sql.Time;
-import java.util.Date;
 
 import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
 
@@ -43,7 +36,7 @@ public class HerosPKFragment extends Fragment {
     private Button battle_btn;
     private View view;
 
-    //用于区分是点击了user还是user2
+    //用于区分是点击了user1还是user2
     private int sig1 = 0;
     private int sig2 = 0;
 
@@ -60,7 +53,6 @@ public class HerosPKFragment extends Fragment {
         user2_imag = (ImageView)view.findViewById(R.id.user2_imag);
         user2_text = (TextView)view.findViewById(R.id.user2_text);
         battle_btn = (Button)view.findViewById(R.id.battle_btn);
-
 
 
         //点击图片跳转到select_hero活动中选择武将
@@ -91,13 +83,14 @@ public class HerosPKFragment extends Fragment {
                 }
                 else {
                     AlertDialog.Builder message = new AlertDialog.Builder(getActivity());
+                    message.setIcon(R.mipmap.vs);
                     message.setTitle("英雄对战结果");
                     if(hero1.getEffectiveness() > hero2.getEffectiveness()) {
-                        message.setMessage(hero1.getName() + "胜");
+                        message.setMessage( "进过激烈的战斗，最终 " + hero1.getName() + " 获得了胜利");
                         who = 1;
                     }
                     else if(hero1.getEffectiveness() < hero2.getEffectiveness()) {
-                        message.setMessage(hero2.getName() + "胜");
+                        message.setMessage("进过激烈的战斗，最终 " +hero2.getName() + " 获得了胜利");
                         who = 2;
                     }
                     else {
