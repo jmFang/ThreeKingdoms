@@ -148,13 +148,20 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         String food = heroFood.getText().toString();
         String introducton = heroIntroduction.getText().toString();
 
-        if (defaultImageId == R.mipmap.ic_take_photo) {
+        if (resImageId == R.mipmap.ic_take_photo) {
             Toast.makeText(this, "尚未选择英雄", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (name.length() == 0) {
             Toast.makeText(this, "人物名字不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        /*
+        * 根据当前状态检查人物名字是否已被占用
+        * */
+        if (isHeroNameInvalid(name)) {
+            Toast.makeText(this, "人物名字已被占用", Toast.LENGTH_SHORT).show();
             return;
         }
         if (sex.length() == 0) {
@@ -241,6 +248,27 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         finish();
     }
 
+    private boolean isHeroNameInvalid(String name) {
+        if (isAddHeroState()) {
+            if (isHeroNameRegistered(name))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isAddHeroState() {
+        return defaultImageId == R.mipmap.ic_take_photo;
+    }
+
+    private boolean isHeroNameRegistered(String name) {
+        for(int i = 0; i < Herolist.size(); i++) {
+            if(name.equals(Herolist.get(i).getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /*
     * 初始化控件
@@ -285,7 +313,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
                         int id = bundle.getInt("imageId");
                         heroImage.setImageResource(id);
                         heroName.setText(name);
-                        defaultImageId = id;
+                        resImageId = id;
                         break;
                 default:
                     break;
