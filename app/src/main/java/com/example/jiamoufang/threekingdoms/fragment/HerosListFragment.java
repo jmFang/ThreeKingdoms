@@ -19,7 +19,7 @@ import java.util.List;
 
 import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
 
-/**
+/*
  * Created by jiamoufang on 2017/11/5.
  */
 
@@ -27,10 +27,11 @@ public class HerosListFragment extends Fragment {
 
     private List<LocalHero>  mHerosList = new ArrayList<>();
     private HeroAdapter heroAdapter;
+    private View view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.tab03, container, false);
+        view =  inflater.inflate(R.layout.tab03, container, false);
         initHeros();
         //这里有点坑,注意是用 view 来拿到 recyclerView，否则拿不到就成了NullPointer，后面就崩了
         RecyclerView recyclerview = (RecyclerView)view.findViewById(R.id.tab03_recyclerview);
@@ -40,7 +41,21 @@ public class HerosListFragment extends Fragment {
         recyclerview.setAdapter(heroAdapter);
 
         return view;
+    }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            initHeros();
+            //这里有点坑,注意是用 view 来拿到 recyclerView，否则拿不到就成了NullPointer，后面就崩了
+            RecyclerView recyclerview = (RecyclerView)view.findViewById(R.id.tab03_recyclerview);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 2);
+            recyclerview.setLayoutManager(gridLayoutManager);
+            heroAdapter = new HeroAdapter(mHerosList);
+            recyclerview.setAdapter(heroAdapter);
+        }else{  //隐藏的时候一般没什么要处理的
+        }
     }
 
     @Override
@@ -51,10 +66,8 @@ public class HerosListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
-    
     private void initHeros() {
         mHerosList.clear();
         for (int i = 0; i < Herolist.size(); i++) {

@@ -1,14 +1,6 @@
 package com.example.jiamoufang.threekingdoms.heros;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.example.jiamoufang.threekingdoms.R;
-import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
-
 import org.litepal.crud.DataSupport;
-
-import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by jiamoufang on 2017/11/7.
@@ -46,6 +38,7 @@ public class LocalHero extends DataSupport{
         this.army = leadership * 1000;
         this.forage = forage;
     }
+
 
     public int getHeroImageId() {
         return heroImageId;
