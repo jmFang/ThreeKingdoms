@@ -40,7 +40,7 @@
         <activity android:name=".activities.HeroDetailsActivity" />
         <activity android:name=".activities.AddHero" />
         <activity android:name=".activities.select_hero" />
-        <activity android:name=".activities.search_hero" />
+        <activity android:name=".activities.SearchHero" />
         <activity android:name=".activities.SelectHeroToEdite"></activity>
     </application>
 

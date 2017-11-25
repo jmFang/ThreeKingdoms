@@ -106,4 +106,20 @@ public class ApiOfDatabase {
     public boolean deleteFromNonEditedHeros(String heroName) {
        return DataSupport.deleteAll(NonEditedHero.class,"heroName = ?",heroName) > 0;
     }
+    /*
+    * 按名字查询本地已经已经添加的英雄
+    */
+    public LocalHero queryLocalHero(String heroName) {
+        List<LocalHero> tmp =  DataSupport.where("name = ?",heroName).find(LocalHero.class);
+        if (tmp.size() > 0 ) {
+            return tmp.get(0);
+        }
+        return null;
+    }
+    /*
+    * 查询全部本地英雄
+    * */
+    public List<LocalHero> queryAllLocalHeros() {
+        return DataSupport.findAll(LocalHero.class);
+    }
 }

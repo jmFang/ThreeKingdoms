@@ -22,7 +22,9 @@ public class SelectHeroToEdite extends AppCompatActivity {
         setContentView(R.layout.activity_select_hero_to_edite);
 
         SelectHeroToEditorAdapter editorAdapter = new SelectHeroToEditorAdapter(SelectHeroToEdite.this,R.layout.non_edited_hero_item, NonEditedHeroList);
+
         ListView noneEditedListView = (ListView) findViewById(R.id.non_edited_listview);
+
         noneEditedListView.setAdapter(editorAdapter);
         noneEditedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

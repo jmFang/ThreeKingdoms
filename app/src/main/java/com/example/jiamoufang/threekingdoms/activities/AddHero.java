@@ -50,7 +50,6 @@ import cn.bmob.v3.listener.UploadFileListener;
 import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
 
 public class AddHero extends AppCompatActivity implements View.OnClickListener{
-    private Uri imgUri;
     private ImageView heroImage;
 
     private MyMusic myMusic;
@@ -220,9 +219,6 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
 
         /*
         * 检查完毕，没有非法数据
-        * Hero(String name, Bitmap heroImage, String sex, String date, String place, String state, String introduction,
-                int force, int inteligence, int leadship, int forage)
-        * */
 
         /*
         * 回传给HeroDetailsActivity

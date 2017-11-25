@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.jiamoufang.threekingdoms.activities.AddHero;
+import com.example.jiamoufang.threekingdoms.activities.SearchHero;
 import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
 import com.example.jiamoufang.threekingdoms.entities.NonEditedHero;
 import com.example.jiamoufang.threekingdoms.entities.PkRecords;
@@ -158,7 +159,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         //Toast.makeText(MainActivity.this, "you select 添加英雄", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.find_hero:
-                        Toast.makeText(MainActivity.this, "查找英雄", Toast.LENGTH_SHORT).show();
+                        Intent toFindHero = new Intent(MainActivity.this, SearchHero.class);
+                        startActivity(toFindHero);
                         break;
                     case R.id.invite_hero:
                         Toast.makeText(MainActivity.this, "未开放邀请好友功能", Toast.LENGTH_SHORT).show();
