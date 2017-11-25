@@ -26,26 +26,31 @@ public class LovedHero extends AppCompatActivity {
 
     private void setHeroInfos() {
         LocalHero hero = getLocalHeroFromDataBase();
-        heroImage.setImageResource(hero.getHeroImageId());
-        name.setText(hero.getName());
-        sex.setText(hero.getSex());
-        birth.setText(hero.getDate());
-        address.setText(hero.getPlace());
-        belong.setText(hero.getState());
-        attack.setText(String.valueOf(hero.getForce()));
-        intelligence.setText(String.valueOf(hero.getIntelligence()));
-        leadership.setText(String.valueOf(hero.getLeadership()));
-        food.setText(String.valueOf(hero.getForage()));
-        introduction.setText(hero.getIntroduction());
+        if(hero != null) {
+            heroImage.setImageResource(hero.getHeroImageId());
+            name.setText(hero.getName());
+            sex.setText(hero.getSex());
+            birth.setText(hero.getDate());
+            address.setText(hero.getPlace());
+            belong.setText(hero.getState());
+            attack.setText(String.valueOf(hero.getForce()));
+            intelligence.setText(String.valueOf(hero.getIntelligence()));
+            leadership.setText(String.valueOf(hero.getLeadership()));
+            food.setText(String.valueOf(hero.getForage()));
+            introduction.setText(hero.getIntroduction());
+        }
     }
 
     private LocalHero getLocalHeroFromDataBase() {
-        String heroName = MylovedHeros.get(0).getHeroName();
-        return new ApiOfDatabase().queryLocalHero(heroName);
+        if (MylovedHeros.size() > 0)     {
+            String heroName = MylovedHeros.get(0).getHeroName();
+            return new ApiOfDatabase().queryLocalHero(heroName);
+        }
+        return null;
     }
 
     private void initViews() {
-        heroImage = (ImageView)findViewById(R.id.card_hero_image);
+        heroImage = (ImageView)findViewById(R.id.imageview_myhero);
         name = (TextView)findViewById(R.id.tv_myhero_name);
         sex = (TextView)findViewById(R.id.tv_myhero_sex);
         birth = (TextView) findViewById(R.id.tv_myhero_birth);

@@ -70,7 +70,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     * */
     private int defaultImageId = R.mipmap.ic_take_photo;
 
-    private  int  resImageId;
+    private  int  resImageId = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -146,7 +146,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         String intelligence = heroIntelligence.getText().toString();
         String leadership = heroLeadership.getText().toString();
         String food = heroFood.getText().toString();
-        String introducton = heroIntroduction.getText().toString();
+        String introduction = heroIntroduction.getText().toString();
 
         if (resImageId == R.mipmap.ic_take_photo) {
             Toast.makeText(this, "尚未选择英雄", Toast.LENGTH_SHORT).show();
@@ -219,33 +219,57 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
             return;
         }
 
-        if (introducton.length() == 0) {
+        if (introduction.length() == 0) {
             Toast.makeText(this, "人物简介不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
         /*
         * 检查完毕，没有非法数据
+       */
 
+        /*写回数据库*/
+        /*
+        *  public LocalHero(String name, int heroImageId, String sex, String date, String place, String state, String introduction,
+                int force, int intelligence, int leadership, int forage)
+        * */
+        if (defaultImageId == R.mipmap.ic_take_photo && resImageId != 0) {
+            LocalHero localHero = new LocalHero(name,resImageId,sex,birth,address,belong,introduction,Integer.parseInt(attack),Integer.parseInt(intelligence),
+                    Integer.parseInt(leadership),Integer.parseInt(food));
+            Herolist.add(localHero);
+            /*加到数据库*/
+            boolean res = new ApiOfDatabase().addToLocalHeros(localHero);
+            if (res) {
+                Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+
+
+        /*返回*/
+       if(defaultImageId != R.mipmap.ic_take_photo && resImageId != 0) {
         /*
         * 回传给HeroDetailsActivity
         * */
-        Intent retIntent = new Intent();
-        Bundle retBundle = new Bundle();
-        retBundle.putString("name", name);
-        retBundle.putString("sex", sex);
-        retBundle.putString("birth",birth);
-        retBundle.putString("address",address);
-        retBundle.putString("belong",belong);
-        retBundle.putString("attack",attack);
-        retBundle.putString("intelligence", intelligence);
-        retBundle.putString("leadership", leadership);
-        retBundle.putString("food", food);
-        retBundle.putString("introduction", introducton);
-        retBundle.putInt("imageId", resImageId);
-        retIntent.putExtras(retBundle);
-        setResult(RESULT_OK,retIntent);
-        finish();
+           Intent retIntent = new Intent();
+           Bundle retBundle = new Bundle();
+           retBundle.putString("name", name);
+           retBundle.putString("sex", sex);
+           retBundle.putString("birth",birth);
+           retBundle.putString("address",address);
+           retBundle.putString("belong",belong);
+           retBundle.putString("attack",attack);
+           retBundle.putString("intelligence", intelligence);
+           retBundle.putString("leadership", leadership);
+           retBundle.putString("food", food);
+           retBundle.putString("introduction", introduction);
+           retBundle.putInt("imageId", resImageId);
+           retIntent.putExtras(retBundle);
+           setResult(RESULT_OK,retIntent);
+           finish();
+       }
+
+
     }
 
     private boolean isHeroNameInvalid(String name) {
@@ -257,7 +281,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     }
 
     private boolean isAddHeroState() {
-        return defaultImageId == R.mipmap.ic_take_photo;
+        return defaultImageId == 0;
     }
 
     private boolean isHeroNameRegistered(String name) {

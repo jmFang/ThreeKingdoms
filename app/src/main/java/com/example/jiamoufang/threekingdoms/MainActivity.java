@@ -104,6 +104,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         /*创建本地数据库*/
         LitePal.getDatabase();
 
+
         /*初始化控件和事件监听*/
         initView();
         initEvent();
@@ -177,6 +178,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
         });
 
+       /*       *//*数据库一键清*//*
+        ApiOfDatabase apiOfDatabase = new ApiOfDatabase();
+        apiOfDatabase.deleteAllMyLovedHero();
+        apiOfDatabase.deleteAllLocalHero();
+        apiOfDatabase.deleteAllPKRecords();
+        apiOfDatabase.deleteAllNonEditedHeros();*/
     }
 
     /*处理订阅事件*
@@ -462,7 +469,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 /*只显示10条
                 * 其它用于搜索
                 * */
-                if (i < 10 ) {
+                if (i < 20 ) {
                     Herolist.add(tmp.get(i));
                 }
             }
@@ -481,6 +488,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void InitNonEditedHeros() {
 
         List<NonEditedHero> tmp = DataSupport.findAll(NonEditedHero.class);
+
         if (tmp.size() == 0) {
             NonEditedHeroList.add(new NonEditedHero("左慈",R.drawable.zuoci));
             NonEditedHeroList.add(new NonEditedHero("祖茂",R.drawable.zumao));

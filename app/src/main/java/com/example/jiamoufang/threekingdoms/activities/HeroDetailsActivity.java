@@ -188,32 +188,38 @@ public class HeroDetailsActivity extends AppCompatActivity {
                                 break;
                             }
                         }
-                        /*从数据库中删除*/
-                        LocalHero hero = Herolist.get(index);
-                        ApiOfDatabase apiOfDatabase = new ApiOfDatabase();
-                        if(apiOfDatabase.deleteFromLocalHeros(hero.getName())) {
-                            Toast.makeText(HeroDetailsActivity.this, hero.getName() + "已删除", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(HeroDetailsActivity.this, hero.getName() + "删除失败", Toast.LENGTH_SHORT).show();
-                        }
+                        /*从链表和数据库中都删除*/
+                        if (index >= 0) {
+                            LocalHero hero = Herolist.get(index);
+                            ApiOfDatabase apiOfDatabase = new ApiOfDatabase();
+                            if(apiOfDatabase.deleteFromLocalHeros(hero.getName())) {
+                                Toast.makeText(HeroDetailsActivity.this, hero.getName() + "已删除", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(HeroDetailsActivity.this, hero.getName() + "删除失败", Toast.LENGTH_SHORT).show();
+                            }
                         /*将被删除的英雄添加到未编辑的英雄中*/
-                        NonEditedHero nonHero = new NonEditedHero(hero.getName(), hero.getHeroImageId());
-                        apiOfDatabase.addNonEditedHero(nonHero);
+                            NonEditedHero nonHero = new NonEditedHero(hero.getName(), hero.getHeroImageId());
+                            apiOfDatabase.addNonEditedHero(nonHero);
 
                         /*再从Herolist全局链表删除*/
-                        Herolist.remove(index);
+                            Herolist.remove(index);
                         /*需要添加到NonEditedHeroList全局链表*/
-                        int index1 = -1;
-                        for (int k = 0; i < NonEditedHeroList.size(); i++) {
-                            if (NonEditedHeroList.get(k).getHeroName().equals(nonHero.getHeroName())) {
-                                index1 = k;
-                                break;
+
+                            int index1 = -1;
+                            for (int k = 0; i < NonEditedHeroList.size(); i++) {
+                                if (NonEditedHeroList.get(k).getHeroName().equals(nonHero.getHeroName())) {
+                                    index1 = k;
+                                    break;
+                                }
+                            }
+                        /*避免重复添加*/
+                            if (index1 == -1) {
+                                NonEditedHeroList.add(nonHero);
                             }
                         }
-                        /*避免重复添加*/
-                        if (index1 == -1) {
-                            NonEditedHeroList.add(nonHero);
-                        }
+
+
+
                         /*
                         * 只有finish是不行的，自己再想想
                         * */

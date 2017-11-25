@@ -144,7 +144,7 @@ public class HerosPKFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         //当从英雄Pk选择的界面跳转到MainActivity的时候执行下面的操作
-        if(data.getExtras().getString("selectName") != null) {
+        if(!data.getExtras().getString("selectName").equals("")) {
             String  heroName = data.getExtras().getString("selectName");
             int index = 0;
             for(int i = 0; i < Herolist.size(); i++) {

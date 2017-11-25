@@ -141,6 +141,15 @@ public class ApiOfDatabase {
         }
         return null;
     }
+    public boolean deleteAllLocalHero() {
+        return DataSupport.deleteAll(LocalHero.class) > 0;
+    }
+    public boolean deleteAllPKRecords() {
+        return DataSupport.deleteAll(PkRecords.class) > 0;
+    }
+    public boolean deleteAllNonEditedHeros() {
+        return DataSupport.deleteAll(NonEditedHero.class) > 0;
+    }
 
 
 }
