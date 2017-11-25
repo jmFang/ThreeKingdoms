@@ -99,4 +99,17 @@ public class SearchHero extends AppCompatActivity {
         }
         return ret;
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        heroNameList = getHeroNameLists();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        heroNameList = getHeroNameLists();
+    }
 }

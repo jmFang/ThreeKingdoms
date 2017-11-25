@@ -218,8 +218,6 @@ public class HeroDetailsActivity extends AppCompatActivity {
                             }
                         }
 
-
-
                         /*
                         * 只有finish是不行的，自己再想想
                         * */
