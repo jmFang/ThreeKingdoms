@@ -16,11 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jiamoufang.threekingdoms.activities.AddHero;
+import com.example.jiamoufang.threekingdoms.activities.LovedHero;
 import com.example.jiamoufang.threekingdoms.activities.SearchHero;
 import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
+import com.example.jiamoufang.threekingdoms.entities.MyLovedHero;
 import com.example.jiamoufang.threekingdoms.entities.NonEditedHero;
 import com.example.jiamoufang.threekingdoms.entities.PkRecords;
 import com.example.jiamoufang.threekingdoms.fragment.HerosListFragment;
@@ -28,6 +31,9 @@ import com.example.jiamoufang.threekingdoms.fragment.HerosPKFragment;
 import com.example.jiamoufang.threekingdoms.fragment.HitHeroFragment;
 import com.example.jiamoufang.threekingdoms.heros.LocalHero;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
@@ -52,7 +58,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public static List<PkRecords> pkRecordsList = new ArrayList<>();
 
     /*我喜欢的英雄*/
-    public static List<LocalHero> MylovedHeros = new ArrayList<>();
+    public static List<MyLovedHero> MylovedHeros = new ArrayList<>();
 
     private DrawerLayout mDrawerLayout;
 
@@ -80,6 +86,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private NavigationView navigationView;
     private View nav_headerView;
     private CircleImageView nav_headerImg;
+    private TextView username;
+
 
     /*
     * 播放音樂MediaPlayer
@@ -92,12 +100,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        navigationView = (NavigationView)findViewById(R.id.nav_view);
-        nav_headerView = navigationView.getHeaderView(0);
-        nav_headerImg = nav_headerView.findViewById(R.id.nav_icon_image);
 
         /*创建本地数据库*/
         LitePal.getDatabase();
+
+        /*初始化控件和事件监听*/
+        initView();
+        initEvent();
 
         /*
         * 实例化几个Localhero类
@@ -110,38 +119,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         InitNonEditedHeros();
 
         /*
-        * 初始化云端
+        * 注册EventBus订阅
         * */
-        Bmob.initialize(this,"885d634d2f139989576fd66a85664c55");
-
-        /*
-        * 云端测试
-        * */
-       /* Person p2 = new Person();
-        p2.setName("lucky girl ddd");
-        p2.setAddress("北京海淀");
-        p2.save(new SaveListener<String>() {
-            @Override
-            public void done(String objectId,BmobException e) {
-                if(e==null){
-                    Toast.makeText(MainActivity.this, "添加数据成功，返回objectId为："+objectId, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(MainActivity.this, "创建数据失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        BmobQuery<Person> bmomquery = new BmobQuery<>();
-        bmomquery.getObject("3f611ed547", new QueryListener<Person>() {
-            @Override
-            public void done(Person person, BmobException e) {
-                if(e == null) {
-                    Toast.makeText(MainActivity.this, "查询成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "查询失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
+        EventBus.getDefault().register(this);
 
         /*
         * navigationView的选择事件
@@ -151,7 +131,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.my_hero:
-                        Toast.makeText(MainActivity.this, "you select 我的英雄", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(MainActivity.this, LovedHero.class);
+                        startActivity(it);
                         break;
                     case R.id.add_hero:
                         Intent toAddHero = new Intent(MainActivity.this, AddHero.class);
@@ -166,7 +147,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         Toast.makeText(MainActivity.this, "未开放邀请好友功能", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
-                        Toast.makeText(MainActivity.this, "you select 设置", Toast.LENGTH_SHORT).show();
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("背景音樂")
                                 .setMessage("是否調為靜音")
@@ -197,8 +177,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
         });
 
-        initView();
-        initEvent();
+    }
+
+    /*处理订阅事件*
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void modifyLovedHero(LocalHero hero) {
+        nav_headerImg.setImageResource(hero.getHeroImageId());
+        username.setText(hero.getName());
+
     }
 
     private void setSelect(final int i) {
@@ -275,6 +262,28 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //mTab01 = new HitHeroFragment();
        // mTab02 = new HerosPKFragment();
         //mTab03 = new HerosListFragment();
+
+        navigationView = (NavigationView)findViewById(R.id.nav_view);
+        nav_headerView = navigationView.getHeaderView(0);
+        nav_headerImg = nav_headerView.findViewById(R.id.nav_icon_image);
+        username = (TextView) nav_headerView.findViewById(R.id.username);
+
+        /*从数据库加载抽屉导航栏头部的信息*/
+        loadNavHearInfo();
+
+
+    }
+    /*
+    * 从数据库加载抽屉导航栏头部的信息
+    * */
+    private void loadNavHearInfo() {
+        MyLovedHero my = new ApiOfDatabase().queryMyLovedHero();
+        if (my != null) {
+            nav_headerImg.setImageResource(my.getImageId());
+            username.setText(my.getHeroName());
+            MylovedHeros.clear();
+            MylovedHeros.add(my);
+        }
     }
 
     @Override
@@ -408,7 +417,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     ,97, 80, 80, 900));
             Herolist.add(new LocalHero("张飞", R.drawable.zhangfei,"男","(？-221)", "幽州涿郡(河北保定市涿州)","蜀","历史简介：\n 与刘备和关羽桃园结义，张飞居第三。随刘备征讨黄巾，刘备终因功被朝廷受予平原相，后张飞鞭挞欲受赂的督邮。十八路诸侯讨董时，三英战吕布，其勇为世人所知。曹操以二虎竞食之计迫刘备讨袁术，刘备以张飞守徐州，诫禁酒，但还是因此而鞭打曹豹招致吕布东袭。刘备反曹后，反用劫寨计擒曹将刘岱，为刘备所赞。徐州终为曹操所破，张飞与刘备失散，占据古城。误以为降汉的关羽投敌，差点一矛将其杀掉。曹操降荊州后引骑追击，刘备败逃，张飞引二十余骑，立马于长阪桥，吓退曹军数十里。庞统死后刘备召其入蜀，张飞率军沿江而上，智擒巴郡太守严颜并生获之，张飞壮而释放。于葭萌关和马超战至夜间，双方点灯，终大战数百回合。瓦口关之战时扮作醉酒，智破张郃。后封为蜀汉五虎大将。及关羽卒，张飞悲痛万分，每日饮酒鞭打部下，导致为帐下将张达、范强所杀，他们持其首顺流而奔孙权。"
                     ,97, 75, 85, 900));
-            Herolist.add(new LocalHero("曹操",R.drawable.ic_caocao,"男","(155-220)", "豫州沛国谯","魏","历史简介：\n 曹操是西园八校尉之一，曾只身行刺董卓，失败后和袁绍共同联合天下诸侯讨伐董卓，后独自发展自身势力，一生中先后战胜了袁术、吕布、张绣、袁绍、刘表、张鲁、马超等割据势力，统一了北方。但是在南下讨伐江东的战役中，曹操在赤壁惨败。后来在和蜀汉的汉中争夺战中，曹操再次无功而返。曹操一生未称帝，他病死后，曹丕继位后不久称帝，追封曹操为魏武皇帝。"
+            Herolist.add(new LocalHero("曹操",R.drawable.caocao,"男","(155-220)", "豫州沛国谯","魏","历史简介：\n 曹操是西园八校尉之一，曾只身行刺董卓，失败后和袁绍共同联合天下诸侯讨伐董卓，后独自发展自身势力，一生中先后战胜了袁术、吕布、张绣、袁绍、刘表、张鲁、马超等割据势力，统一了北方。但是在南下讨伐江东的战役中，曹操在赤壁惨败。后来在和蜀汉的汉中争夺战中，曹操再次无功而返。曹操一生未称帝，他病死后，曹丕继位后不久称帝，追封曹操为魏武皇帝。"
                     ,85, 92, 92, 950));
             Herolist.add(new LocalHero("周瑜",R.drawable.zhouyu,"男","(175-210)", "扬州庐江郡舒","吴","历史简介：\n 偏将军、南郡太守。自幼与孙策交好，策离袁术讨江东，瑜引兵从之。为中郎将，孙策相待甚厚，又同娶二乔。策临终，嘱弟权曰：“外事不决，可问周瑜”。瑜奔丧还吴，与张昭共佐权，并荐鲁肃等，掌军政大事。赤壁战前，瑜自鄱阳归。力主战曹，后于群英会戏蒋干、怒打黄盖行诈降计、后火烧曹军，大败之。后下南郡与曹仁相持，中箭负伤，与诸葛亮较智斗，定假涂灭虢等计，皆为亮破，后气死于巴陵，年三十六岁。临终，上书荐鲁肃代其位，权为其素服吊丧。"
                     ,80, 90, 89, 900));
@@ -476,6 +485,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

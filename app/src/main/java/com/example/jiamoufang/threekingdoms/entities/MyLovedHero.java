@@ -10,6 +10,10 @@ public class MyLovedHero extends DataSupport {
     private int ImageId;
     private String heroName;
 
+    public MyLovedHero(String heroName, int ImageId) {
+        this.heroName = heroName;
+        this.ImageId = ImageId;
+    }
     public void setImageId(int imageId) {
         ImageId = imageId;
     }

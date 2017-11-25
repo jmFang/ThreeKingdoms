@@ -24,8 +24,10 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'org.litepal.android:core:1.4.1'
     // compile'com.squareup.okhttp3:okhttp:3.4.1'
+
+
+    compile 'org.litepal.android:core:1.4.1'
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile 'com.android.support:design:26.+'
@@ -39,6 +41,6 @@ dependencies {
     compile 'cn.bmob.android:bmob-im:2.0.5@aar'
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     compile 'cn.bmob.android:http-legacy:1.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     testCompile 'junit:junit:4.12'
-
 }

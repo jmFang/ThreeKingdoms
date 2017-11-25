@@ -41,7 +41,8 @@
         <activity android:name=".activities.AddHero" />
         <activity android:name=".activities.select_hero" />
         <activity android:name=".activities.SearchHero" />
-        <activity android:name=".activities.SelectHeroToEdite"></activity>
+        <activity android:name=".activities.SelectHeroToEdite" />
+        <activity android:name=".activities.LovedHero"/>
     </application>
 
 </manifest>

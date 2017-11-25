@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AlertDialogLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,10 +26,14 @@ import com.example.jiamoufang.threekingdoms.MyMusic;
 import com.example.jiamoufang.threekingdoms.R;
 import com.example.jiamoufang.threekingdoms.api.ApiOfBmob;
 import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
+import com.example.jiamoufang.threekingdoms.entities.MyLovedHero;
 import com.example.jiamoufang.threekingdoms.entities.NonEditedHero;
 import com.example.jiamoufang.threekingdoms.heros.LocalHero;
 
+import org.greenrobot.eventbus.EventBus;
+
 import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
+import static com.example.jiamoufang.threekingdoms.MainActivity.MylovedHeros;
 import static com.example.jiamoufang.threekingdoms.MainActivity.NonEditedHeroList;
 
 /**
@@ -83,8 +88,45 @@ public class HeroDetailsActivity extends AppCompatActivity {
         fab_heroDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(HeroDetailsActivity.this);
+                builder.setMessage("选择" + heroName + "做为您喜爱的英雄？");
+                builder.setTitle("收藏");
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        /*将该英雄设置为我的英雄*/
+                        lovedThisHero(heroName);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
             }
         });
+    }
+    /*
+    * 设置我的英雄
+    * 更新抽屉菜单头像为英雄头像
+    * 与MainActvity通信，告诉它更新相关头像
+    * 先从数据库获取该英雄，通过EventBus传输给主活动
+    * */
+    private void lovedThisHero(String heroName) {
+        /*先从数据库获取该英雄*/
+        LocalHero hero = new ApiOfDatabase().queryLocalHero(heroName);
+        /*通过EventBus发送给主活动*/
+        EventBus.getDefault().post(hero);
+        /*将该英雄放入全局链表*/
+        MylovedHeros.clear();
+        MylovedHeros.add(new MyLovedHero(hero.getName(),hero.getHeroImageId()));
+        /*写入数据库*/
+        ApiOfDatabase api = new ApiOfDatabase();
+        api.deleteAllMyLovedHero();
+        api.WriteMyLovedHerosToDatabase(MylovedHeros);
     }
 
     private void initViews() {

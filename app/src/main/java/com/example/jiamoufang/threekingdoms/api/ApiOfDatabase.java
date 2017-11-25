@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ArrayAdapter;
 
+import com.example.jiamoufang.threekingdoms.entities.MyLovedHero;
 import com.example.jiamoufang.threekingdoms.entities.NonEditedHero;
 import com.example.jiamoufang.threekingdoms.entities.PkRecords;
 import com.example.jiamoufang.threekingdoms.heros.LocalHero;
@@ -57,7 +58,7 @@ public class ApiOfDatabase {
     /*
     * 将所有的MyLovedHero写回数据库
     * */
-    public boolean WriteMyLovedHerosToDatabase(List<LocalHero> myLovedHerosList) {
+    public boolean WriteMyLovedHerosToDatabase(List<MyLovedHero> myLovedHerosList) {
         for (int i = 0; i < myLovedHerosList.size(); i++) {
             myLovedHerosList.get(i).save();
         }
@@ -122,4 +123,24 @@ public class ApiOfDatabase {
     public List<LocalHero> queryAllLocalHeros() {
         return DataSupport.findAll(LocalHero.class);
     }
+
+    /*
+    * 删除所有的MyLovedHero
+    * 其实一直都只保存了一条数据
+    * */
+    public boolean deleteAllMyLovedHero() {
+       return DataSupport.deleteAll(MyLovedHero.class) > 0;
+    }
+    /*
+    * 查询获取MyLovedHero
+    * */
+    public MyLovedHero queryMyLovedHero() {
+        List<MyLovedHero> res = DataSupport.findAll(MyLovedHero.class);
+        if (res.size() > 0) {
+            return res.get(0);
+        }
+        return null;
+    }
+
+
 }
