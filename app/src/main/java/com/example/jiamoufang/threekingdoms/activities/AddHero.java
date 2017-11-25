@@ -52,8 +52,6 @@ import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
 public class AddHero extends AppCompatActivity implements View.OnClickListener{
     private Uri imgUri;
     private ImageView heroImage;
-    /*记录英雄的图片，但确认提交时用以保存到Litepal数据库*/
-    private Bitmap heroBitmap;
 
     private MyMusic myMusic;
     /*
@@ -67,39 +65,18 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     * 提交按钮
     * */
     private Button submit;
-    /*进度条*/
-    private ProgressBar progressBar;
-    /*是否点击上传或拍照*/
-    private boolean isUpload = false;
-    private int defaultImageId;
-    /*
-    * 是否更新
-    * */
-    private boolean isUpdate = false;
-    /*
-    * 图片的路径，作为把图片文件上传到云端的一个必然参数
-    * */
-    private String photoPath = "";
+
     /*
     * 区分当前是添加英雄状态还是修改英雄状态
     * */
-    private int state = 0;
-    /*上传成功*/
-    private boolean ok = false;
-    /*云端id*/
-    private String id = "";
-    /*从人物详情界面发过来的图片的resource ID*/
+    private int defaultImageId = R.mipmap.ic_take_photo;
+
     private  int  resImageId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_hero);
-        /*
-         * 设置拍照时屏幕不随手机旋转
-         */
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR); //不随手机旋转
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //设置直向显示
 
         initView();
         initEvent();
@@ -140,8 +117,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageview_addhero:
-                selectFrormHeroStorage();
-                //onAlertDialog();
+                selectFrormNonEditedHeros();
                 break;
             case R.id.add_hero_submit:
                 onCheckAllTextInput();
@@ -153,7 +129,7 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
     /*
     * 从未被编辑的英雄列表中选择想要添加的英雄
     * */
-    private void selectFrormHeroStorage() {
+    private void selectFrormNonEditedHeros() {
         Intent it = new Intent(AddHero.this, SelectHeroToEdite.class);
         startActivityForResult(it, 102);
     }
@@ -172,6 +148,11 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         String leadership = heroLeadership.getText().toString();
         String food = heroFood.getText().toString();
         String introducton = heroIntroduction.getText().toString();
+
+        if (defaultImageId == R.mipmap.ic_take_photo) {
+            Toast.makeText(this, "尚未选择英雄", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (name.length() == 0) {
             Toast.makeText(this, "人物名字不能为空", Toast.LENGTH_SHORT).show();
@@ -237,25 +218,6 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
             return;
         }
 
-
-        /*
-        * 如果是通过拍照或者上传
-        * */
-        if (isUpload) {
-            heroImage.setDrawingCacheEnabled(true);
-            Bitmap heroBitmap = Bitmap.createBitmap(heroImage.getDrawingCache());
-        }
-
-        if (defaultImageId == R.mipmap.ic_take_photo) {
-            Toast.makeText(this, "人物头像未上传", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            Toast.makeText(this, "人物头像已上传", Toast.LENGTH_SHORT).show();
-            if(isUpload) {
-                heroImage.setDrawingCacheEnabled(false);
-            }
-        }
-
         /*
         * 检查完毕，没有非法数据
         * Hero(String name, Bitmap heroImage, String sex, String date, String place, String state, String introduction,
@@ -281,99 +243,8 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         retIntent.putExtras(retBundle);
         setResult(RESULT_OK,retIntent);
         finish();
-        /*
-        * 与 HerosListFragment通信，将newHero传过去
-        * 或者上传到云端
-        * 这里有点坑啊，图片上传和添加到数据库如果分开写则是异步执行的，把添加动作放进图片上传成功后面执行才可以
-        * */
-        /*if (!photoPath.equals("")) {
-            final BmobFile bmobFile = new BmobFile(new File(photoPath));
-            final Hero newHero = new Hero( name,bmobFile,sex,birth,address,belong,introducton,Integer.parseInt(attack),
-                    Integer.parseInt(intelligence),Integer.parseInt(leadership),Integer.parseInt(food));
-            if (isUpload) {
-                bmobFile.uploadblock(new UploadFileListener() {
-                    @Override
-                    public void done(BmobException e) {
-                        if(e == null) {
-                            Toast.makeText(AddHero.this, "图片上传成功", Toast.LENGTH_SHORT).show();
-                            ApiOfBmob apiOfBmob = new ApiOfBmob();
-                            id = apiOfBmob.UploadHero(newHero, getApplicationContext());
-                            if (!id.equals(""))
-                                ok = true;
-                        } else {
-                            Toast.makeText(AddHero.this, "图片上传失败", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    *//*
-                    * 上传进度，显示进度条，可以美化进度条
-                    * *//*
-                    @Override
-                    public void onProgress(Integer value) {
-                        super.onProgress(value);
-                        progressBar.setVisibility(View.VISIBLE);
-                        //int progress =  progressBar.getProgress();
-                        progressBar.setProgress(value);
-                        if (value == 100) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    }
-
-                });
-            }
-            if (ok) {
-                ApiOfBmob api = new ApiOfBmob();
-                Hero hero = api.getHeroFormBmob(id, AddHero.this);
-                Toast.makeText(this, hero.getName(), Toast.LENGTH_SHORT).show();
-            }
-        }//end if photopath*/
     }
 
-    /*
-    * 弹出对话框，选择拍照还是从相册上传
-    * */
-    private void onAlertDialog() {
-        final String[] items = {"拍照","从相册选择"};
-        AlertDialog.Builder dialog = new AlertDialog.Builder(AddHero.this);
-        dialog.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        onGet();
-                        break;
-                    case 1:
-                        onGetPhotoFromStorage();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        dialog.setCancelable(true);
-        dialog.show();
-    }
-
-    /*
-    * 从外存拿图片
-    * */
-    private void onGetPhotoFromStorage() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);// 选取内容
-        intent.setType("image/*");
-        startActivityForResult(intent, 101);
-
-    }
-
-    /*
-    * 启动相机拍照,获取本地存路径，拍完照存放
-    * */
-    private void onGet() {
-        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        String fname = "p" + System.currentTimeMillis() + ".png"; //设置不会重复的文件名
-        imgUri = Uri.parse("file://" + dir + "/" + fname); //按路径名创建Uri对象
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri); //将uri加到拍照的intent的额外数据中
-        startActivityForResult(intent,100);
-    }
 
     /*
     * 初始化控件
@@ -391,16 +262,9 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         heroFood = (TextInputEditText) findViewById(R.id.tv_hero_food);
         heroIntroduction = (EditText) findViewById(R.id.etv_hero_introduction);
         submit = (Button) findViewById(R.id.add_hero_submit);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         /*
         * haveTakenPic 初始化为默认的R.mipmap.ic_take_photo,表示图片为上传
         * */
-        isUpload = false;
-        defaultImageId = R.mipmap.ic_take_photo;
-        /*
-        * 是否更新云端英雄资料
-        * */
-        isUpdate = false;
     }
     /*
     * 事件注册
@@ -419,101 +283,18 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case 100:
-                    Intent it = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,imgUri);
-                    sendBroadcast(it);
-                    break;
-                case 101:
-                    imgUri = convetUri(data.getData());
-                    showImg();
-                    break;
                 case 102:
                         Bundle bundle = data.getExtras();
                         String name = bundle.getString("heroName");
                         int id = bundle.getInt("imageId");
                         heroImage.setImageResource(id);
                         heroName.setText(name);
+                        defaultImageId = id;
                         break;
                 default:
                     break;
             }
-//            showImg();
         }
-        /*else {
-            Toast.makeText(this, requestCode == 100? "没有拍到照片":"没有选取到照片", Toast.LENGTH_SHORT).show();
-        }*/
-    }
-
-    /*
-    * Uri 路径转换
-    * */
-    Uri convetUri(Uri uri) {
-        if (uri.toString().substring(0, 7).equals("content")) {
-            String[] colName = {MediaStore.MediaColumns.DATA};
-            Cursor cursor = getContentResolver().query(uri, colName, null, null, null);
-            cursor.moveToFirst();
-            uri = Uri.parse("file://" + cursor.getString(0));
-            cursor.close();
-        }
-        return uri;
-    }
-
-    /*
-    * 显示图片
-    * */
-    private void showImg() {
-        int picture_w, picture_h,imageview_w, imageview_h;
-        boolean neeedRrotate; //是否需要旋转
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;//只读取图像信息而不载入图像文件
-        BitmapFactory.decodeFile(imgUri.getPath(), options);//将读取的文件信息存放到options对象中
-        picture_w = options.outWidth;
-        picture_h = options.outHeight;
-        imageview_w = heroImage.getWidth();
-        imageview_h = heroImage.getHeight();
-
-        int scaleFactor;
-        if (picture_w < picture_h) {
-            neeedRrotate = false;  //不需要旋转
-            scaleFactor = Math.min(picture_w/imageview_w,picture_h/imageview_h); //计算缩小比例
-        } else {
-            neeedRrotate = true;  //需要旋转
-            scaleFactor = Math.min(picture_h/imageview_w,picture_w/imageview_h); //计算缩小比例
-        }
-
-        options.inJustDecodeBounds = false; //关闭
-        options.inSampleSize = scaleFactor;
-        //Bitmap 图片转换为字节，可存储到litepal
-        Bitmap bmp = BitmapFactory.decodeFile(imgUri.getPath(),options);
-        //当点击确认提交时，将heroBitmap保存到本地数据库
-        heroBitmap = bmp;
-
-        if (neeedRrotate) {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            bmp = Bitmap.createBitmap(bmp,0,0,bmp.getWidth(),bmp.getHeight(), matrix, true);
-        }
-        heroImage.setImageBitmap(bmp);
-
-        /*
-        * 已经拿到图片，haveTakenPic置为R.mipmap.ic_take_photo +1;
-        * */
-        defaultImageId = R.mipmap.ic_take_photo+1;
-        /*拿到照片*/
-        isUpload = true;
-
-        /* 设置上传到云端的图片的路径参数*/
-        photoPath = imgUri.getPath();
-
-        new AlertDialog.Builder(this)
-                .setTitle("图像信息")
-                .setMessage("图像文件路径：" + imgUri.getPath() +
-                "\n 原始尺寸：" + picture_w + "x" + picture_h +
-                "\n 载入尺寸: " + bmp.getWidth() + "x" + bmp.getHeight() +
-                "\n 显示尺寸: " + imageview_w + "x" + imageview_h)
-                .setNegativeButton("关闭", null)
-                .setCancelable(false)
-                .show();
     }
 
     private void EditHero(String heroname) {
@@ -536,13 +317,10 @@ public class AddHero extends AppCompatActivity implements View.OnClickListener{
         heroLeadership.setText(""+ tem.getLeadership());
         heroFood.setText(""+ tem.getForage());
         heroImage.setImageResource(tem.getHeroImageId());
+        defaultImageId = tem.getHeroImageId();
+        /*人物头像设置不能点击，强制不让用户替换*/
         heroImage.setClickable(false);
+
         resImageId = tem.getHeroImageId();
-        /*
-         * 从人物详情跳转过来时，人物头像不为空，所以在设置了界面信息之后，需要修改defaultImageId
-         * 头像不是默认的图片，修改defaultImageId，使得它不等于默认的图片的id */
-        defaultImageId = R.mipmap.ic_take_photo + 1;
-        /*更新云端英雄资料*/
-        isUpdate = true;
     }
 }

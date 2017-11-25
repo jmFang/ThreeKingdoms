@@ -10,7 +10,7 @@
             android:icon="@mipmap/ic_add_circle_outline_black_48dp"
             android:title="添加英雄"/>
         <item
-            android:id="@+id/del_hero"
+            android:id="@+id/find_hero"
             android:icon="@mipmap/ic_search_black_48dp"
             android:title="查找英雄"/>
         <item

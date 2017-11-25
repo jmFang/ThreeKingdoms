@@ -157,11 +157,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         startActivity(toAddHero);
                         //Toast.makeText(MainActivity.this, "you select 添加英雄", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.del_hero:
-                        Toast.makeText(MainActivity.this, "you select 删除英雄", Toast.LENGTH_SHORT).show();
+                    case R.id.find_hero:
+                        Toast.makeText(MainActivity.this, "查找英雄", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.invite_hero:
-                        Toast.makeText(MainActivity.this, "you select 邀请好友", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "未开放邀请好友功能", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.settings:
                         Toast.makeText(MainActivity.this, "you select 设置", Toast.LENGTH_SHORT).show();

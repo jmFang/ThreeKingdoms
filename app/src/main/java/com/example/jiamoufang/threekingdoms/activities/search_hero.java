@@ -35,11 +35,9 @@ public class search_hero extends AppCompatActivity {
         Map<String, Object> temp = new LinkedHashMap<>();
         temp.put("image", "drawable/guanyu");
         temp.put("name", "关羽");
-        temp.put("detail", "男，字：云长，生卒：？-219年，籍贯：司隶河东郡解（山西运城市临猗县西南），主要效力势力：蜀");
         headerlist.add(temp);
 
         //实际上要根据searchItems更新视图
-
 
         searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

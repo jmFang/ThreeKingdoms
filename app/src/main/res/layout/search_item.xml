@@ -25,18 +25,6 @@
         android:textColor="#D3D3D3"
         android:textSize="20sp"
         android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/detail"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="30dp"
-        android:text="男，字：云长，生卒：？-219年，籍贯：司隶河东郡解（山西运城市临猗县西南），主要效力势力：蜀"
-        android:textColor="#D3D3D3"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toRightOf="@+id/image"
-        app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>
 
 

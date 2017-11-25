@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,9 +23,13 @@ import com.bumptech.glide.Glide;
 import com.example.jiamoufang.threekingdoms.MainActivity;
 import com.example.jiamoufang.threekingdoms.MyMusic;
 import com.example.jiamoufang.threekingdoms.R;
+import com.example.jiamoufang.threekingdoms.api.ApiOfBmob;
+import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
+import com.example.jiamoufang.threekingdoms.entities.NonEditedHero;
 import com.example.jiamoufang.threekingdoms.heros.LocalHero;
 
 import static com.example.jiamoufang.threekingdoms.MainActivity.Herolist;
+import static com.example.jiamoufang.threekingdoms.MainActivity.NonEditedHeroList;
 
 /**
  * Created by jiamoufang on 2017/11/5.
@@ -41,6 +47,7 @@ public class HeroDetailsActivity extends AppCompatActivity {
     private  ImageView heroImage;
     private TextView heroTextContent;
     private TextView info_heroDetails;
+    private FloatingActionButton fab_heroDetails;
     private int sig = 0;
 
     @Override
@@ -57,30 +64,37 @@ public class HeroDetailsActivity extends AppCompatActivity {
         String sex = intent.getStringExtra("sex");
         String belong = intent.getStringExtra("belong");
 
-
-        toolbar = (Toolbar)findViewById(R.id.toolbar_heroDetails);
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collaspsing_heroDetails);
-        coordinatorlayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
-        heroImage = (ImageView)findViewById(R.id.iamge_hero_details);
-        heroTextContent = (TextView)findViewById(R.id.textView_heroDetails);
-        info_heroDetails = (TextView) findViewById(R.id.info_heroDetails);
+        initViews();
 
         setSupportActionBar(toolbar);
-
         ActionBar actionBar = getSupportActionBar();
-
-
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         collapsingToolbarLayout.setTitle(heroName);
         Glide.with(this).load(heroImageId).into(heroImage);
-       coordinatorlayout.setBackgroundResource(heroImageId);
+        coordinatorlayout.setBackgroundResource(heroImageId);
         heroTextContent.setText(introduction);
         info_heroDetails.setText(sex + ", 生卒：" + birth +", 籍贯：" +  address + ", 主校势力：" + belong);
 
         myMusic = new MyMusic(this);
+
+        fab_heroDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+    }
+
+    private void initViews() {
+        toolbar = (Toolbar)findViewById(R.id.toolbar_heroDetails);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collaspsing_heroDetails);
+        coordinatorlayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
+        heroImage = (ImageView)findViewById(R.id.iamge_hero_details);
+        heroTextContent = (TextView)findViewById(R.id.textView_heroDetails);
+        info_heroDetails = (TextView) findViewById(R.id.info_heroDetails);
+        fab_heroDetails = (FloatingActionButton) findViewById(R.id.fab_heroDetails);
     }
 
     @Override
@@ -125,11 +139,38 @@ public class HeroDetailsActivity extends AppCompatActivity {
                 message.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         sig = 1;
+                        int index = -1;
                         for(int j = 0; j < Herolist.size(); j++) {
                             if(heroName.equals(Herolist.get(j).getName())) {
-                                Herolist.remove(j);
+                                index = j;
                                 break;
                             }
+                        }
+                        /*从数据库中删除*/
+                        LocalHero hero = Herolist.get(index);
+                        ApiOfDatabase apiOfDatabase = new ApiOfDatabase();
+                        if(apiOfDatabase.deleteFromLocalHeros(hero.getName())) {
+                            Toast.makeText(HeroDetailsActivity.this, hero.getName() + "已删除", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(HeroDetailsActivity.this, hero.getName() + "删除失败", Toast.LENGTH_SHORT).show();
+                        }
+                        /*将被删除的英雄添加到未编辑的英雄中*/
+                        NonEditedHero nonHero = new NonEditedHero(hero.getName(), hero.getHeroImageId());
+                        apiOfDatabase.addNonEditedHero(nonHero);
+
+                        /*再从Herolist全局链表删除*/
+                        Herolist.remove(index);
+                        /*需要添加到NonEditedHeroList全局链表*/
+                        int index1 = -1;
+                        for (int k = 0; i < NonEditedHeroList.size(); i++) {
+                            if (NonEditedHeroList.get(k).getHeroName().equals(nonHero.getHeroName())) {
+                                index1 = k;
+                                break;
+                            }
+                        }
+                        /*避免重复添加*/
+                        if (index1 == -1) {
+                            NonEditedHeroList.add(nonHero);
                         }
                         /*
                         * 只有finish是不行的，自己再想想
@@ -156,7 +197,7 @@ public class HeroDetailsActivity extends AppCompatActivity {
                     int index = -1;
                     for (int i = 0; i < Herolist.size(); i++) {
                         if (Herolist.get(i).getName().equals(name)) {
-                            index = 0;
+                            index = i;
                             break;
                         }
                     }

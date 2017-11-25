@@ -74,6 +74,16 @@ public class ApiOfDatabase {
        return false;
     }
     /*
+    * 向NonEditedHero表添加一条数据
+    * */
+    public boolean addNonEditedHero(NonEditedHero hero) {
+        List<NonEditedHero> tmp = DataSupport.where("heroName = ?", hero.getHeroName()).find(NonEditedHero.class);
+        if (tmp.size() == 0) {
+            return hero.save();
+        }
+        return false;
+    }
+    /*
     * 按英雄名字删除一条本地英雄记录
     * false : 没有这个英雄
     * true : 删除成功
