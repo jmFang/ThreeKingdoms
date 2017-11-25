@@ -3,6 +3,8 @@ package com.example.jiamoufang.threekingdoms.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.jiamoufang.threekingdoms.R;
+import com.example.jiamoufang.threekingdoms.adapter.HeroAdapter;
 import com.example.jiamoufang.threekingdoms.adapter.PKRecordAdapter;
 import com.example.jiamoufang.threekingdoms.entities.PkRecords;
 import com.oragee.banners.BannerView;
@@ -37,10 +40,11 @@ public class HitHeroFragment extends Fragment {
     };
     private List<View> viewsList;
     private List<PkRecords> pkRecordsList = new ArrayList<>();
+    private View view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.tab01, container, false);
+        view =  inflater.inflate(R.layout.tab01, container, false);
 
         /*
         * 设置 ‘三国志’页面顶部的动画轮播
@@ -79,6 +83,19 @@ public class HitHeroFragment extends Fragment {
         for (int i = 0;i < tmp.size(); i++) {
             if (i < 10)
                 pkRecordsList.add(tmp.get(i));
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            initRecords();
+            //这里有点坑,注意是用 view 来拿到 recyclerView，否则拿不到就成了NullPointer，后面就崩了
+            PKRecordAdapter adapter = new PKRecordAdapter(getContext(),R.layout.pk_record_item,pkRecordsList);
+            ListView pkrecordslistview = (ListView) view.findViewById(R.id.listview_records);
+            pkrecordslistview.setAdapter(adapter);
+        }else{  //隐藏的时候一般没什么要处理的
         }
     }
 }

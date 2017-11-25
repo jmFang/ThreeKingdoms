@@ -123,6 +123,12 @@ public class ApiOfDatabase {
     public List<LocalHero> queryAllLocalHeros() {
         return DataSupport.findAll(LocalHero.class);
     }
+    /*
+    * 查找所有的对决记录
+    * */
+    public List<PkRecords> queryAllPkRecords() {
+        return DataSupport.findAll(PkRecords.class);
+    }
 
     /*
     * 删除所有的MyLovedHero
@@ -131,6 +137,7 @@ public class ApiOfDatabase {
     public boolean deleteAllMyLovedHero() {
        return DataSupport.deleteAll(MyLovedHero.class) > 0;
     }
+
     /*
     * 查询获取MyLovedHero
     * */

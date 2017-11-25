@@ -1,6 +1,7 @@
 package com.example.jiamoufang.threekingdoms.fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jiamoufang.threekingdoms.MainActivity;
 import com.example.jiamoufang.threekingdoms.R;
 import com.example.jiamoufang.threekingdoms.activities.select_hero;
 import com.example.jiamoufang.threekingdoms.api.ApiOfDatabase;
@@ -61,7 +63,7 @@ public class HerosPKFragment extends Fragment {
             public void onClick(View view) {
                 sig1 = 1;
                 sig2 = 0;
-                startActivityForResult(new Intent(getActivity(), select_hero.class), 1);
+               startActivityForResult(new Intent(getActivity(), select_hero.class), Activity.RESULT_FIRST_USER);
             }
         });
 
@@ -70,7 +72,7 @@ public class HerosPKFragment extends Fragment {
             public void onClick(View view) {
                 sig1 = 0;
                 sig2 = 1;
-                startActivityForResult(new Intent(getActivity(), select_hero.class), 2);
+                startActivityForResult(new Intent(getActivity(), select_hero.class), Activity.RESULT_FIRST_USER);
             }
         });
 
@@ -140,12 +142,15 @@ public class HerosPKFragment extends Fragment {
 
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         //当从英雄Pk选择的界面跳转到MainActivity的时候执行下面的操作
-        if(!data.getExtras().getString("selectName").equals("")) {
-            String  heroName = data.getExtras().getString("selectName");
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(data.getStringExtra("selectName").length() > 0) {
+            String  heroName = data.getStringExtra("selectName");
             int index = 0;
             for(int i = 0; i < Herolist.size(); i++) {
                 if(heroName.equals(Herolist.get(i).getName())) {

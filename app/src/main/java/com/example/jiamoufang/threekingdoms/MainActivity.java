@@ -137,7 +137,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         break;
                     case R.id.add_hero:
                         Intent toAddHero = new Intent(MainActivity.this, AddHero.class);
-                        startActivityForResult(toAddHero, 3);
+                        startActivity(toAddHero);
                         //Toast.makeText(MainActivity.this, "you select 添加英雄", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.find_hero:
@@ -198,7 +198,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     /*
     * 添加英雄回调函数。写入HeroList和数据库
     * */
-    @Override
+ /*   @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case 3:
@@ -217,14 +217,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     int imageId = bundle.getInt("imageId");
                     LocalHero localHero = new LocalHero(name, imageId, sex, birth, address,
                             belong, introduction, attack, intelligence, leadership, food);
-                    /*写入HeroList*/
+                    *//*写入HeroList*//*
                     Herolist.add(localHero);
-                    /*写入数据库*/
+                    *//*写入数据库*//*
                     ApiOfDatabase apiOfDatabase = new ApiOfDatabase();
                     apiOfDatabase.addToLocalHeros(localHero);
                 }
         }
-    }
+    }*/
 
     private void setSelect(final int i) {
         FragmentManager fm = getSupportFragmentManager();
@@ -237,6 +237,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     mTab01 = new HitHeroFragment();
                     transaction.add(R.id.id_content, mTab01, "main");
                 } else {
+                     /*更新对决记录*/
+                    pkRecordsList.clear();
+                    pkRecordsList = new ApiOfDatabase().queryAllPkRecords();
                     transaction.show(mTab01);
                 }
                 break;
