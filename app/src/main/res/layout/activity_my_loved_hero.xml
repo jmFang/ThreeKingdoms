@@ -27,135 +27,176 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!--横向 属性框-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80009688"
                 android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="0dp"
+                    android:layout_height="220dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_weight="1.2"
                     android:orientation="vertical"
-                    android:layout_marginLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:layout_height="220dp">
+                    android:paddingTop="10dp">
+
                     <ImageView
+                        android:id="@+id/imageview_myhero"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:scaleType="centerInside"
-                        android:src="@mipmap/ic_take_photo"
-                        android:id="@+id/imageview_myhero"/>
+                        android:src="@mipmap/ic_take_photo" />
                 </LinearLayout>
 
                 <!--纵向分布：属性值-->
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:orientation="vertical"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:paddingTop="10dp"
+                    android:layout_weight="1.5"
+                    android:orientation="vertical"
                     android:paddingBottom="10dp"
-                    android:layout_height="wrap_content">
+                    android:paddingTop="10dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="10dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical|center"
+                            android:text="名字"
                             android:textColor="#fff"
                             android:textSize="18sp"
-                            android:text="名字"/>
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="3"
                             android:id="@+id/tv_myhero_name"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:textColor="@android:color/background_dark"
                             android:textSize="18sp"
-                            android:layout_height="wrap_content" />
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="10dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical|center"
+                            android:text="性别"
                             android:textColor="#fff"
                             android:textSize="18sp"
-                            android:text="性别"/>
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="3"
                             android:id="@+id/tv_myhero_sex"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:textColor="@android:color/background_dark"
                             android:textSize="18sp"
-                            android:layout_height="wrap_content" />
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="10dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical|center"
+                            android:text="生卒"
                             android:textColor="#fff"
                             android:textSize="18sp"
-                            android:text="生卒"/>
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="3"
                             android:id="@+id/tv_myhero_birth"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:textColor="@android:color/background_dark"
                             android:textSize="18sp"
-                            android:layout_height="wrap_content" />
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="10dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical|center"
+                            android:text="籍贯"
                             android:textColor="#fff"
                             android:textSize="18sp"
-                            android:text="籍贯"/>
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="3"
                             android:id="@+id/tv_myhero_address"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:textColor="@android:color/background_dark"
                             android:textSize="18sp"
-                            android:layout_height="wrap_content" />
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="10dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical|center"
+                            android:text="势力"
                             android:textColor="#fff"
                             android:textSize="18sp"
-                            android:text="势力"/>
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="3"
                             android:id="@+id/tv_myhero_belong"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:textColor="@android:color/background_dark"
                             android:textSize="18sp"
-                            android:layout_height="wrap_content" />
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
-            <!--横向 属性框-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -173,40 +214,55 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:gravity="center_vertical|center"
                             android:text="武力"
+                            android:textColor="#fff"
                             android:textSize="18sp"
-                            android:textColor="#fff" />
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/tv_myhero_attack"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2.3"
+                            android:textColor="@android:color/background_dark"
                             android:textSize="18sp"
-                            android:layout_weight="2.3" />
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:gravity="center_vertical|center"
                             android:text="统率"
+                            android:textColor="#fff"
                             android:textSize="18sp"
-                            android:textColor="#fff" />
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/tv_myhero_leadership"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2.3"
                             android:inputType="number"
-                            android:layout_weight="2.3" />
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/background_dark" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -218,44 +274,59 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_height="100dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:gravity="center_vertical|center"
                             android:text="智力"
+                            android:textColor="#fff"
                             android:textSize="18sp"
-                            android:textColor="#fff" />
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/tv_myhero_intelligence"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2.3"
+                            android:textColor="@android:color/background_dark"
                             android:textSize="18sp"
-                            android:layout_weight="2.3" />
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:gravity="center_vertical|center"
                             android:text="粮草"
+                            android:textColor="#fff"
                             android:textSize="18sp"
-                            android:textColor="#fff" />
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:id="@+id/tv_myhero_food"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2.3"
+                            android:textColor="@android:color/background_dark"
                             android:textSize="18sp"
-                            android:layout_weight="2.3" />
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
 
